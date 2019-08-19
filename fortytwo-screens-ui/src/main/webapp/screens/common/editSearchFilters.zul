@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?init class="com.arvatosystems.t9t.tfi.web.WorkbenchInit" pagename="requests28"?>
+<?xel-method prefix="l"  name="i18nLabel"  class="com.arvatosystems.t9t.tfi.web.ZulUtils" signature="String i18nLabel(String)"?>
+<?xel-method prefix="l2" name="i18nLabel2" class="com.arvatosystems.t9t.tfi.web.ZulUtils" signature="String i18nLabel(String, String args)"?>
+<?xel-method prefix="labelBykey"   name="comboLabelBykey" class="com.arvatosystems.t9t.tfi.web.ZulUtils" signature="String getLabelByKey(String, String)"?>
+<?xel-method prefix="l"  name="errorPopupInfo"  class="com.arvatosystems.t9t.tfi.web.ZulUtils" signature="com.arvatosystems.t9t.tfi.model.bean.ErrorPopupEntity getErrorPopupInfo(com.arvatosystems.t9t.tfi.services.ReturnCodeException)"?>
+
+<zk xmlns:c="client">
+    <window apply="org.zkoss.bind.BindComposer"
+        sizable="true" maximizable="true" mode="modal" width="50%"
+        height="50%" title="${l:i18nLabel('editSearchFilters.title')}"
+        viewModel="@id('vm') @init('com.arvatosystems.t9t.components.tools.EditSearchFiltersViewModel',initParams=arg)">
+        <div class="form" vflex="1">
+            <groupbox vflex="1">
+                <vlayout vflex="1">
+                    <listbox id="editListBox" class="inline-listbox" model="@bind(vm.searchFiltersVM)"
+                     onDrop="@command('onDrop', draggedId=event.dragged.id, droppedId=self.id)" droppable="true"
+                     hflex="true" vflex="1" sizedByContent="true" span="true" emptyMessage="${l:i18nLabel('com.no.data.found')}">
+                        <listhead menupopup="auto" sizable="true">
+                            <listheader label="" valign="top" />
+                            <listheader label="${l:i18nLabel('editSearchFilters.filterName')}" valign="top" />
+                            <listheader label="${l:i18nLabel('editSearchFilters.filterType')}" valign="top" />
+                            <listheader label="${l:i18nLabel('editSearchFilters.filterNegate')}" valign="top" />
+                        </listhead>
+                        <template name="model">
+                            <listitem id="li-${forEachStatus.index}" draggable="@bind(each.selected)" droppable="@bind(each.selected)" onDrop="@command('onDrop', draggedId=event.dragged.id, droppedId=self.id)">
+                                <listcell><checkbox onCheck="@command('onChecked', isChecked=each.selected)" checked="@bind(each.selected)" value="@bind(each.selected)"></checkbox></listcell>
+                                <listcell><label value="@bind(each.filterName)"></label></listcell>
+                                <listcell>
+                                    <combobox onChange="@command('onComboboxChange')" disabled="@bind(!each.selected)" selectedItem="@bind(each.currentSelection)" model="@bind(each.filterTypes)">
+                                        <template name="model">
+                                            <comboitem label="@load(each)"/>
+                                        </template>
+                                    </combobox>
+                                 </listcell>
+                                <listcell><checkbox disabled="@bind(!each.selected)" checked="@bind(each.negate)" value="@bind(each.negate)"></checkbox></listcell>
+                            </listitem>
+                        </template>
+                    </listbox>
+                </vlayout>
+                <vlayout style="margin-top:20px;text-align:right;" vflex="min">
+                    <hlayout>
+                        <label visible="@bind(vm.selectionEmpty)"  value="${l:i18nLabel('editSearchFilters.atLeastOneFilter')}" />
+                        <label visible="@bind(vm.dropDownMissing)" value="${l:i18nLabel('editSearchFilters.dropDownMissing')}" />
+                        <button28 id="saveButton" disabled="@bind(vm.disableSaveButton)" onClick="@command('updateSearchFilters')" />
+                        <button28 id="closeButton" onClick="@command('closeWindow')" />
+                    </hlayout>
+                </vlayout>
+            </groupbox>
+        </div>
+    </window>
+</zk>

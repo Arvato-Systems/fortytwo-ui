@@ -1,0 +1,9 @@
+<!-- zul definition of the components used for a CRUD or SEARCH screen. -->
+<zk>
+    <groupbox28 id="filterGroup" vflex="min">
+         <filter28 id="filters" />
+    </groupbox28>
+    <groupbox28 id="resultsGroup" vflex="1">
+         <grid28 id="main" />
+    </groupbox28>
+</zk>

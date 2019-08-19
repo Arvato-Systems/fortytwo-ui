@@ -1,0 +1,33 @@
+*~
+*.bkp
+*.bak
+*.o
+*.a
+
+# java Package Files #
+*.class
+//*.jar
+*.war
+*.ear
+*.zip
+
+# TeX files
+*.aux
+*.log
+*.out
+
+# maven target directories
+target/
+
+# generated files within XText / XTend projects
+src-gen/
+xtend-gen/
+bin/
+test-output/
+generated/
+
+# eclipse project files
+.classpath
+.project
+.settings
+.checkstyle

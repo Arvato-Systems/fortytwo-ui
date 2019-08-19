@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?init class="com.arvatosystems.t9t.tfi.web.WorkbenchInit" pagename="IGNORE"?>
+<?xel-method prefix="l" name="i18nLabel" class="com.arvatosystems.t9t.tfi.web.ZulUtils" signature="String i18nLabel(String)"?>
+
+<zk xmlns:c="client">
+    <window id="main" title="${labels.login.version} ${labels.version}" width="440px" border="normal" mode="overlapped" position="center,center"
+        apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('com.arvatosystems.t9t.tfi.viewmodel.TenantSelectionViewModel')" visible="@load(vm.visible)">
+        <style src="/css/login.css" />
+        <style src="/css/body.css" />
+
+        <div class="form">
+            <grid class="grid">
+                <columns>
+                    <column label="" width="35%" />
+                    <column label="" width="65%" />
+                </columns>
+                <rows>
+                    <row align="center">
+                        <cell colspan="2" align="center">
+                            <image src="/img/logo/company_logo.png" />
+                        </cell>
+                    </row>
+                    <row>
+                        <cell colspan="2" align="center">
+                            <separator height="1px" bar="true" />
+                        </cell>
+                    </row>
+
+                    <row>
+                        <cell colspan="2" align="center">
+                            <label value="${l:i18nLabel('login.sub.title')}" />
+                        </cell>
+                    </row>
+                    <row>
+                        <cell colspan="2" align="center">
+                            <separator height="1px" bar="true" />
+                        </cell>
+                    </row>
+                    <row>
+                        <cell colspan="2" align="left">
+                            <label style="font-weight: bold;" value="${l:i18nLabel('tenant.choose')}" />
+                        </cell>
+                    </row>
+                    <row>
+                        <cell>
+                            <label value="${l:i18nLabel('tenant.title')}" class="name" />
+                        </cell>
+                        <cell>
+                            <combobox id="tenantList" hflex="1" model="@bind(vm.tenantListModel)" selectedItem="@bind(vm.selected)"
+                                 rows="1" mold="default" readonly="true" focus="true"
+                                extra="@searchType(AsciiFilter)@valueType(equalsValue)" onOK="@command('redirect')">
+                                <template name="model">
+                                    <comboitem label="@bind(each.tenantId)" />
+                                </template>
+                            </combobox>
+                        </cell>
+                    </row>
+                    <row>
+                        <cell />
+                        <cell align="left">
+                            <button28 id="redirectButton" onClick="@command('redirect')" autodisable="redirectButton,logoff"/>
+                            &#160;&#160;&#160;
+
+                            <button28 id="logoff" apply="com.arvatosystems.t9t.tfi.viewmodel.LogoutViewModel"
+                                autodisable="redirectButton,logoff" visible="@load(not vm.isCancelClose"/>
+
+                            <button28 id="cancelButton" onClick="main.onClose();" autodisable="redirectButton,logoff" visible="@load(vm.isCancelClose)"/>
+                        </cell>
+                    </row>
+
+
+                </rows>
+
+            </grid>
+        </div>
+    </window>
+</zk>

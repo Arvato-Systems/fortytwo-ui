@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xel-method prefix="l" name="i18nLabel" class="com.arvatosystems.t9t.tfi.web.ZulUtils" signature="String i18nLabel(String)"?>
+    <window id="main" title="${labels.login.version} ${labels.version}"
+    width="400px" apply="org.zkoss.bind.BindComposer"
+    viewModel="@id('vm') @init('com.arvatosystems.t9t.tfi.viewmodel.LoginViewModel')"
+    border="normal" mode="overlapped" position="center,center"
+    onClientInfo="@command('onClientInfo', eventData=event)"
+    xmlns:h="native"
+    xmlns:w="http://www.zkoss.org/2005/zk/client">
+    <style src="/css/login.css" />
+    <style src="/css/body.css" />
+    <h:script>
+        zk.afterMount(function() {
+             zkbind.$('$main').command('realTimezone', { tzid: Intl.DateTimeFormat().resolvedOptions().timeZone } );
+        });
+       </h:script>
+    <h:form id="f" class="form"  name="loginform" action="" method="POST">
+        <grid class="grid">
+            <columns>
+                <column label="" width="35%" />
+                <column label="" width="65%" />
+            </columns>
+            <rows>
+                <row align="center">
+                    <cell colspan="2" align="center">
+                        <image src="/img/logo/company_logo.png" />
+                    </cell>
+                </row>
+                <row>
+                    <cell colspan="2" align="center">
+                        <separator height="1px" bar="true" />
+                    </cell>
+                </row>
+                <row>
+                    <cell colspan="2" align="center"> <label value="@load(l:i18nLabel('login.sub.title'))"  /> </cell>
+                </row>
+                <row>
+                    <cell colspan="2" align="center">
+                        <separator height="1px" bar="true" />
+                    </cell>
+                </row>
+                <row>
+                    <cell > <label value="${l:i18nLabel('login.user')}" class="name" /> </cell>
+                    <cell>
+                        <textbox id="userName" focus="true" name="user" maxlength="16" hflex="1" onOK="@command('login', username=userName.value)"/>
+                    </cell>
+                </row>
+                <row>
+                    <cell > <label value="${l:i18nLabel('login.password')}" class="name" /> </cell>
+                    <cell>
+                        <textbox id="passwordTxb" type="password" name="pass" maxlength="64" hflex="1" onOK="@command('login', username=userName.value)"/>
+                    </cell>
+                </row>
+                <row>
+                    <cell > <label value="${l:i18nLabel('login.language')}" class="name" /> </cell>
+                    <cell >
+                        <combobox  hflex="1" model="@bind(vm.languageListModel)" selectedItem="@bind(vm.selected)"
+                             rows="1" mold="default" onSelect="@command('switchLanguageOnLogin')">
+                            <template name="model" var="language">
+                                <comboitem value="@bind(language)" label="@bind(language.name)" />
+                            </template>
+                        </combobox>
+                    </cell>
+                </row>
+                <row>
+                    <cell colspan="2" align="right" valign="bottom">
+                        <a href="/screens/login/forgotPassword.zul" label="${l:i18nLabel('forgotpw.forgotpassword')}" />
+                        &#160;&#160;&#160;
+                        <button id="btnLogin" label="${l:i18nLabel('login.title')}"
+                            height="${l:i18nLabel('com.button.height')}" width="${l:i18nLabel('com.button.width')}" onClick="@command('login', username=userName.value)"/>
+                    </cell>
+                </row>
+                <row if="${not empty requestScope.loginFailure}">
+                    <cell colspan="2">
+                        <label sclass="z-color-red" value="${l:i18nLabel('err.login.failed')}" />
+                        <!--
+                        <html sclass="z-color-red">
+                            ${requestScope.loginFailure}
+                        </html>
+                         -->
+                    </cell>
+                </row>
+                <row height="1px" visible="false">
+                 <cell colspan="2" height="1px" visible="false">
+                   <label visible="false" sclass="z-color-transparent" value="ZK Version : ${desktop.webApp.version} - build ${desktop.webApp.build}"/>
+                 </cell>
+              </row>
+            </rows>
+        </grid>
+    </h:form>
+</window>

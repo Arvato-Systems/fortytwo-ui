@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?init class="com.arvatosystems.t9t.tfi.web.WorkbenchInit" pagename="requests28"?>
+<?xel-method prefix="l"  name="i18nLabel"  class="com.arvatosystems.t9t.tfi.web.ZulUtils" signature="String i18nLabel(String)"?>
+<?xel-method prefix="l2" name="i18nLabel2" class="com.arvatosystems.t9t.tfi.web.ZulUtils" signature="String i18nLabel(String, String args)"?>
+<?xel-method prefix="labelBykey"   name="comboLabelBykey" class="com.arvatosystems.t9t.tfi.web.ZulUtils" signature="String getLabelByKey(String, String)"?>
+<?xel-method prefix="l"  name="errorPopupInfo"  class="com.arvatosystems.t9t.tfi.web.ZulUtils" signature="com.arvatosystems.t9t.tfi.model.bean.ErrorPopupEntity getErrorPopupInfo(com.arvatosystems.t9t.tfi.services.ReturnCodeException)"?>
+
+<zk xmlns:c="client">
+    <window apply="org.zkoss.bind.BindComposer"
+        sizable="true" maximizable="true" mode="modal" width="50%"
+        height="50%" title="${l:i18nLabel('editGrid.addRemoveGridColumn')}"
+        viewModel="@id('vm') @init('com.arvatosystems.t9t.components.tools.EditGridViewModel',initParams=arg)">
+        <div class="form" vflex="1">
+            <groupbox vflex="1">
+                <vlayout vflex="1">
+                 <label class="label" value="${l:i18nLabel('editGrid.fieldName')}" />
+                    <listbox id="editListBox" class="inline-listbox" hflex="true" vflex="1" sizedByContent="true" span="true" emptyMessage="${l:i18nLabel('com.no.data.found')}">
+                        <listhead menupopup="auto" sizable="true" visible="false">
+                            <listheader label="${l:i18nLabel('editGrid.fieldName')}" valign="top" />
+                        </listhead>
+                    </listbox>
+                </vlayout>
+                <vlayout vflex="min">
+                    <hlayout>
+                        <button28 id="updateGrid" autodisable="updateGrid,closeButton" onClick="@command('updateGrid')"/>
+                        <button28 id="closeButton" autodisable="updateGrid,closeButton" onClick="@command('closeWindow')"/>
+                    </hlayout>
+                </vlayout>
+            </groupbox>
+        </div>
+    </window>
+</zk>
