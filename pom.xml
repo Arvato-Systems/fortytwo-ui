@@ -22,17 +22,17 @@
     <parent>
         <groupId>com.arvato-systems.t9t</groupId>
         <artifactId>global-build</artifactId>
-        <version>2.9-SNAPSHOT</version>
+        <version>2.9.3</version>
         <relativePath/>
     </parent>
 
     <artifactId>fortytwo-ui-build</artifactId>
-    <version>4.11-SNAPSHOT</version>
+    <version>4.11.3</version>
     <packaging>pom</packaging>
     <description>Build instructions for fortytwo-ui</description>
 
     <properties>
-        <t9t.version>3.11-SNAPSHOT</t9t.version>
+        <t9t.version>3.11.3</t9t.version>
 
         <maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>
         <packname>-${project.version}-FL-${maven.build.timestamp}</packname>
