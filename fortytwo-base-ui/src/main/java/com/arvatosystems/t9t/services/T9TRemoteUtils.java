@@ -30,6 +30,7 @@ import com.arvatosystems.t9t.base.api.RequestParameters;
 import com.arvatosystems.t9t.base.api.ServiceResponse;
 import com.arvatosystems.t9t.base.auth.AuthenticationRequest;
 import com.arvatosystems.t9t.base.auth.AuthenticationResponse;
+import com.arvatosystems.t9t.base.search.LeanGroupedSearchRequest;
 import com.arvatosystems.t9t.base.search.LeanSearchRequest;
 import com.arvatosystems.t9t.base.search.ReadAll28Response;
 import com.arvatosystems.t9t.base.search.ReadAllResponse;
@@ -182,8 +183,9 @@ public class T9TRemoteUtils {
                         return emptyResp;
                     }
                 }
-                int maxAllowed = sc.getSearchOutputTarget() != null ? SANITY_MAX_RECORDS_EXPORT :
-                    requestParameters instanceof LeanSearchRequest ? SANITY_MAX_RECORDS_LEAN : SANITY_MAX_RECORDS_UI;
+                int maxAllowed = sc.getSearchOutputTarget() != null ? SANITY_MAX_RECORDS_EXPORT
+                    : (requestParameters instanceof LeanSearchRequest || requestParameters instanceof LeanGroupedSearchRequest)
+                    ? SANITY_MAX_RECORDS_LEAN : SANITY_MAX_RECORDS_UI;
                 if (sc.getLimit() <= 0 || sc.getLimit() > maxAllowed) {
                     LOGGER.warn("Unlimited / huge search requested - limiting to {} entries...", maxAllowed);
                     sc.setLimit(maxAllowed);
