@@ -32,6 +32,7 @@ public class GroupedDropdownDataField extends AbstractDataField<GroupedDropdown2
 
     private final GroupedDropdown28Db<Ref> c;
     private final IGroupedDropdown28DbFactory<Ref> factory;
+    private Ref retryRef;
 
     public GroupedDropdownDataField(DataFieldParameters params, String dropdownType, IGroupedDropdown28DbFactory<Ref> dbFactory) {
         super(params);
@@ -71,6 +72,7 @@ public class GroupedDropdownDataField extends AbstractDataField<GroupedDropdown2
     @Override
     public void setValue(Ref data) {
         Description desc = data == null ? null : c.lookupByRef(data.getObjectRef());
+        retryRef = desc == null ? data : null;
         LOGGER.debug("{}.setValue(): setting {} results in {}", getFieldName(), data, desc);
         c.setValue(desc == null ? null : desc.getId());
     }
@@ -109,7 +111,14 @@ public class GroupedDropdownDataField extends AbstractDataField<GroupedDropdown2
      * @param group
      */
     private void setGroupValue(Long ref) {
-        c.setGroup(ref);
-        c.reloadDropDownData();
+        // only reload if group is changed
+        if (ref == null && c.getGroup() != null || ref != null && !ref.equals(c.getGroup())) {
+            c.setGroup(ref);
+            c.reloadDropDownData();
+            // check if retry required
+            if (retryRef != null) {
+                setValue(retryRef);
+            }
+        }
     }
 }
