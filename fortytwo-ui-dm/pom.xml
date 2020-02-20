@@ -22,7 +22,7 @@
     <parent>
         <groupId>com.arvato-systems.t9t</groupId>
         <artifactId>fortytwo-ui-build</artifactId>
-        <version>4.13-SNAPSHOT</version>
+        <version>4.13.0</version>
     </parent>
 
     <artifactId>fortytwo-ui-dm</artifactId>
