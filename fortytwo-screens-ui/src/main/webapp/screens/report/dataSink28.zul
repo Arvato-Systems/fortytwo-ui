@@ -46,6 +46,7 @@
                                           id2="chunkSize"               value2="@bind(vm.data.chunkSize)"/>
                                 <cells228 id="lazyOpen"                 value ="@bind(vm.data.lazyOpen)"
                                           id2="skipZeroRecordSinkRefs"  value2="@bind(vm.data.skipZeroRecordSinkRefs)"/>
+                                <cells28  id ="responseDataSinkRef"     value ="@load(vm.data.responseDataSinkRef) @save(vm.data.responseDataSinkRef,before='commandSave')"/>
                             </rows>
                         </form28>
                     </tabpanel>
