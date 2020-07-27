@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.arvato-systems.t9t</groupId>
         <artifactId>fortytwo-settings-ui</artifactId>
-        <version>4.14.1</version>
+        <version>4.14.2</version>
         <relativePath>../fortytwo-settings-ui</relativePath>
     </parent>
 
