@@ -25,17 +25,17 @@ import org.slf4j.LoggerFactory;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.Combobox;
 
-import com.arvatosystems.t9t.tfi.component.SimpleListModelExt;
-import com.arvatosystems.t9t.tfi.web.ApplicationSession;
 import com.arvatosystems.t9t.base.search.Description;
 import com.arvatosystems.t9t.base.search.LeanSearchRequest;
 import com.arvatosystems.t9t.component.fields.fixedfilters.IDescriptionFilter;
 import com.arvatosystems.t9t.component.fields.fixedfilters.IFixedFilter;
+import com.arvatosystems.t9t.tfi.component.SimpleListModelExt;
+import com.arvatosystems.t9t.tfi.web.ApplicationSession;
 
-import de.jpaw.bonaparte.pojos.apiw.Ref;
+import de.jpaw.bonaparte.core.BonaPortable;
 import de.jpaw.dp.Jdp;
 
-public class Dropdown28Db<REF extends Ref> extends Combobox {
+public class Dropdown28Db<REF extends BonaPortable> extends Combobox {
     private static final Logger LOGGER = LoggerFactory.getLogger(Dropdown28Db.class);
     private static final long serialVersionUID = 3911446278727438869L;
 

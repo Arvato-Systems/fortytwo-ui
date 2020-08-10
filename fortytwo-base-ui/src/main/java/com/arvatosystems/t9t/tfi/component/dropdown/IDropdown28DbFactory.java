@@ -15,8 +15,10 @@
  */
 package com.arvatosystems.t9t.tfi.component.dropdown;
 
+import com.arvatosystems.t9t.base.search.Description;
 import com.arvatosystems.t9t.base.search.LeanSearchRequest;
 
+import de.jpaw.bonaparte.core.BonaPortable;
 import de.jpaw.bonaparte.pojos.apiw.Ref;
 
 /** Describes a factory for a Dropdown Combobox which is populated via a DB query.
@@ -24,7 +26,7 @@ import de.jpaw.bonaparte.pojos.apiw.Ref;
  *
  * @since 3.0.2
  */
-public interface IDropdown28DbFactory<REF extends Ref> extends IDropdown28BasicFactory<Dropdown28Db<REF>> {
+public interface IDropdown28DbFactory<REF extends BonaPortable> extends IDropdown28BasicFactory<Dropdown28Db<REF>> {
 
     /** Returns an instance of the search request which queries data. */
     LeanSearchRequest getSearchRequest();
@@ -34,6 +36,33 @@ public interface IDropdown28DbFactory<REF extends Ref> extends IDropdown28BasicF
 
     /** Creates a type safe Ref (Key) object by alphanumeric identifier. */
     REF createKey(String id);
+
+    /** Creates a type safe Ref (Key) object by description. Sets ID as well as reference. */
+    default REF createKey(Description desc) {
+        if (desc == null) {
+            return null;
+        } else {
+            final REF ref = createKey(desc.getId());
+            if (ref instanceof Ref) {
+                ((Ref) ref).setObjectRef(desc.getObjectRef());
+                return ref;
+            } else {
+                // in these cases, the method must be overwritten
+                throw new IllegalArgumentException("Must implement createKey for type " + ref.getClass());
+            }
+        }
+    }
+
+    /** Returns the alphanumeric identifier of a data type reference. */
+    default String getIdFromData(REF data, Dropdown28Db<REF> instance) {
+        if (data instanceof Ref) {
+            Description desc = instance.lookupByRef(((Ref)data).getObjectRef());
+            return desc == null ? null : desc.getId();
+        } else {
+            // in these cases, the method must be overwritten
+            throw new IllegalArgumentException("Must implement getIdFromData for type " + data.getClass());
+        }
+    }
 
     /** Returns the identifier if the REF is a KEY. */
     String getIdFromKey(REF key);

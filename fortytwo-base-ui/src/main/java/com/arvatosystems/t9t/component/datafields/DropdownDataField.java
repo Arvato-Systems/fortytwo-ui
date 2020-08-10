@@ -23,20 +23,20 @@ import com.arvatosystems.t9t.tfi.component.dropdown.Dropdown28Db;
 import com.arvatosystems.t9t.tfi.component.dropdown.IDropdown28DbFactory;
 import com.arvatosystems.t9t.base.search.Description;
 
-import de.jpaw.bonaparte.pojos.apiw.Ref;
+import de.jpaw.bonaparte.core.BonaPortable;
 
-public class DropdownDataField extends AbstractDataField<Dropdown28Db<Ref>, Ref> {
+public class DropdownDataField<T extends BonaPortable> extends AbstractDataField<Dropdown28Db<T>, T> {
     private static final Logger LOGGER = LoggerFactory.getLogger(DropdownDataField.class);
 
-    protected final Dropdown28Db<Ref> c;
-    protected final IDropdown28DbFactory<Ref> factory;
+    protected final Dropdown28Db<T> c;
+    protected final IDropdown28DbFactory<T> factory;
 
     @Override
     public boolean empty() {
         return c.getValue() == null;
     }
 
-    public DropdownDataField(DataFieldParameters params, String dropdownType, IDropdown28DbFactory<Ref> dbFactory) {
+    public DropdownDataField(DataFieldParameters params, String dropdownType, IDropdown28DbFactory<T> dbFactory) {
         super(params);
         factory = dbFactory;
         c = dbFactory.createInstance();
@@ -49,12 +49,12 @@ public class DropdownDataField extends AbstractDataField<Dropdown28Db<Ref>, Ref>
     }
 
     @Override
-    public Dropdown28Db<Ref> getComponent() {
+    public Dropdown28Db<T> getComponent() {
         return c;
     }
 
     @Override
-    public Ref getValue() {
+    public T getValue() {
         String res1 = c.getValue();
         Comboitem res = c.getSelectedItem();
 
@@ -69,9 +69,9 @@ public class DropdownDataField extends AbstractDataField<Dropdown28Db<Ref>, Ref>
     }
 
     @Override
-    public void setValue(Ref data) {
-        Description desc = data == null ? null : c.lookupByRef(data.getObjectRef());
-        LOGGER.debug("{}.setValue(): setting {} results in {}", getFieldName(), data, desc);
-        c.setValue(desc == null ? null : desc.getId());
+    public void setValue(T data) {
+        String id = data == null ? null : factory.getIdFromData(data, c);
+        LOGGER.debug("{}.setValue(): setting {} results in {}", getFieldName(), data, id);
+        c.setValue(id);
     }
 }

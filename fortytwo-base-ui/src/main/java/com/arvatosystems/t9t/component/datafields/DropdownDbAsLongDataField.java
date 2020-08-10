@@ -19,24 +19,24 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zkoss.zul.Comboitem;
 
+import com.arvatosystems.t9t.base.search.Description;
 import com.arvatosystems.t9t.tfi.component.dropdown.Dropdown28Db;
 import com.arvatosystems.t9t.tfi.component.dropdown.IDropdown28DbFactory;
-import com.arvatosystems.t9t.base.search.Description;
 
-import de.jpaw.bonaparte.pojos.apiw.Ref;
+import de.jpaw.bonaparte.core.BonaPortable;
 
-public class DropdownDbAsLongDataField extends AbstractDataField<Dropdown28Db<Ref>, Long> {
+public class DropdownDbAsLongDataField<T extends BonaPortable> extends AbstractDataField<Dropdown28Db<T>, Long> {
     private static final Logger LOGGER = LoggerFactory.getLogger(DropdownDbAsLongDataField.class);
 
-    protected final Dropdown28Db<Ref> c;
-    protected final IDropdown28DbFactory<Ref> factory;
+    protected final Dropdown28Db<T> c;
+    protected final IDropdown28DbFactory<T> factory;
 
     @Override
     public boolean empty() {
         return c.getValue() == null;
     }
 
-    public DropdownDbAsLongDataField(DataFieldParameters params, String dropdownType, IDropdown28DbFactory<Ref> dbFactory) {
+    public DropdownDbAsLongDataField(DataFieldParameters params, String dropdownType, IDropdown28DbFactory<T> dbFactory) {
         super(params);
         factory = dbFactory;
         c = dbFactory.createInstance();
@@ -49,7 +49,7 @@ public class DropdownDbAsLongDataField extends AbstractDataField<Dropdown28Db<Re
     }
 
     @Override
-    public Dropdown28Db<Ref> getComponent() {
+    public Dropdown28Db<T> getComponent() {
         return c;
     }
 

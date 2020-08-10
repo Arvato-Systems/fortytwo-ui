@@ -73,8 +73,7 @@ public class DropdownConverter implements Converter<Object, Object, Component> {
         if (d == null)
             return null;
 
-        Ref r = dropdown28Db.getFactory().createKey(d.getId());
-        r.setObjectRef(d.getObjectRef());
+        Object r = dropdown28Db.getFactory().createKey(d);
 
         if (box.getSelectedItem() == null) {
             return compAttr;
