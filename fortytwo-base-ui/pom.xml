@@ -52,13 +52,16 @@
 
     <dependencies>
         <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- t9t framework dependencies -->
+        <dependency>
             <groupId>com.arvato-systems.t9t</groupId>
             <artifactId>t9t-all-api</artifactId>
         </dependency>
-       <dependency>
-            <groupId>org.zkoss.zkforge</groupId>
-            <artifactId>ckez</artifactId>
-       </dependency>
         <dependency>
             <groupId>com.arvato-systems.t9t</groupId>
             <artifactId>t9t-init</artifactId>
@@ -79,6 +82,75 @@
             <groupId>com.arvato-systems.t9t</groupId>
             <artifactId>t9t-httppool-be</artifactId>
         </dependency>
+
+        <!-- ZK dependencies -->
+        <dependency>
+            <groupId>org.zkoss.zk</groupId>
+            <artifactId>zkbind</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.zkoss.zk</groupId>
+            <artifactId>zk</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.zkoss.zk</groupId>
+            <artifactId>zhtml</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.zkoss.zk</groupId>
+            <artifactId>zul</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.zkoss.common</groupId>
+            <artifactId>zweb</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.zkoss.common</groupId>
+            <artifactId>zel</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.zkoss.common</groupId>
+            <artifactId>zcommon</artifactId>
+            <exclusions>
+                <!-- the slf4j-jdk14 binding causes crippled log files -->
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-jdk14</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+       <dependency>
+            <groupId>org.zkoss.zkforge</groupId>
+            <artifactId>ckez</artifactId>
+       </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+        </dependency>
+
+        <!-- APACHE SHIRO -->
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-web</artifactId>
+        </dependency>
+
+        <!-- APACHE COMMONS -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
+
+        <!-- Test and runtime dependencies -->
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
