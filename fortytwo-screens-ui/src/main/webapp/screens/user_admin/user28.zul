@@ -42,6 +42,8 @@
                                           id2="mobilePhoneNo"                   value2="@load(vm.data.mobilePhoneNo)                   @save(vm.data.mobilePhoneNo,   before='commandSave')"/>
                                 <cells228 id ="office"                          value ="@load(vm.data.office)                          @save(vm.data.office,          before='commandSave')"
                                           id2="department"                      value2="@load(vm.data.department)                      @save(vm.data.department,      before='commandSave')"/>
+                                <cells228 id ="orgUnit"                         value ="@load(vm.data.orgUnit)                         @save(vm.data.orgUnit,          before='commandSave')"
+                                          id2="salutation"                      value2="@load(vm.data.salutation)                      @save(vm.data.salutation,      before='commandSave')"/>
                                 <cells28  id ="jobTitle"                        value ="@load(vm.data.jobTitle)                        @save(vm.data.jobTitle,        before='commandSave')"/>
                                 <cells28  id ="z" colspan1="3" rows1="4"        value ="@load(vm.data.z)                               @save(vm.data.z,before='commandSave')"/>
                                 <row>
