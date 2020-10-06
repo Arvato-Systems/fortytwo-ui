@@ -7,8 +7,9 @@
                 currentMode="@load(vm.currentMode)">
             <form28 id="sliceTrackingCrud" aspect="2" >
                 <rows>
-                    <cells28 id="dataSinkId"        value ="@load(vm.data.dataSinkId) @save(vm.data.dataSinkId,before='commandSave')"/>
-                    <cells28 id="id"                value ="@load(vm.data.id) @save(vm.data.id,before='commandSave')"/>
+                    <cells28 id="dataSinkId"         value ="@load(vm.data.dataSinkId)         @save(vm.data.dataSinkId,before='commandSave')"/>
+                    <cells28 id="id"                 value ="@load(vm.data.id)                 @save(vm.data.id,before='commandSave')"/>
+                    <cells28 id="gap"                value ="@load(vm.data.gap)                @save(vm.data.gap,before='commandSave')"/>
                     <cells28 id="exportedDataBefore" value ="@load(vm.data.exportedDataBefore) @save(vm.data.exportedDataBefore,before='commandSave')"/>
                 </rows>
             </form28>
