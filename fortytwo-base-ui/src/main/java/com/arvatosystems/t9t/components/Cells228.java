@@ -54,8 +54,8 @@ public class Cells228 extends Cells28 {
 
     private IDataField idf2;
     private Label label2;
-    private Cell cell3;
-    private Cell cell4;
+    private Cell cell2a;
+    private Cell cell2b;
     private String dataFieldId2;
     private Object deferredValue2;
     private int colspan2 = 1;
@@ -69,15 +69,15 @@ public class Cells228 extends Cells28 {
 
     public Cells228() {
         super();
-        cell3 = new Cell();
-        cell3.setParent(this);
-        cell4 = new Cell();
-        cell4.setParent(this);
+        cell2a = new Cell();
+        cell2a.setParent(this);
+        cell2b = new Cell();
+        cell2b.setParent(this);
         label2 = new Label();
-        label2.setParent(cell3);
+        label2.setParent(cell2a);
         if (cellHeight != null) {
-            cell3.setHeight(cellHeight);
-            cell4.setHeight(cellHeight);
+            cell2a.setHeight(cellHeight);
+            cell2b.setHeight(cellHeight);
         }
     }
 
@@ -134,7 +134,7 @@ public class Cells228 extends Cells28 {
                 LOGGER.debug("InputElement2 {} space owner is {}, dataField space owner {}", dataFieldId2, iE.getSpaceOwner(), dataField2.getSpaceOwner());
             }
             dataField2.setId(dataFieldId2 + ".c");
-            dataField2.setParent(cell4);
+            dataField2.setParent(cell2b);
 
             // also forward the onChange event to allow saving of changed data
             dataField2.addEventListener(Events.ON_CHANGE, (ev) -> {
@@ -167,7 +167,7 @@ public class Cells228 extends Cells28 {
 
     public void setColspan2(int colspan2) {
         this.colspan2 = colspan2;
-        cell4.setColspan(colspan2);
+        cell2b.setColspan(colspan2);
     }
 
     public int getRows2() {

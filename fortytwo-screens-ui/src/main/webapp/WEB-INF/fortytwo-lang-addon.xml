@@ -40,6 +40,11 @@
         <extends>div</extends>
     </component>
     <component>
+        <component-name>cells328</component-name>
+        <component-class>com.arvatosystems.t9t.components.Cells328</component-class>
+        <extends>row</extends>
+    </component>
+    <component>
         <component-name>cells228</component-name>
         <component-class>com.arvatosystems.t9t.components.Cells228</component-class>
         <extends>row</extends>

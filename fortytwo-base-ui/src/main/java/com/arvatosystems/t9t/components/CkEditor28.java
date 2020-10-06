@@ -83,8 +83,8 @@ public class CkEditor28 extends Row {
     private TextDataField textDataField;
     private CKeditor ckEditor;
     private Label label;
-    private Cell cell1;
-    private Cell cell2;
+    private Cell cell1a;
+    private Cell cell1b;
     private String dataFieldId;
     private Object deferredValue;
     private int colspan1 = 1;
@@ -96,15 +96,15 @@ public class CkEditor28 extends Row {
 
     public CkEditor28() {
         super();
-        cell1 = new Cell();
-        cell1.setParent(this);
-        cell2 = new Cell();
-        cell2.setParent(this);
+        cell1a = new Cell();
+        cell1a.setParent(this);
+        cell1b = new Cell();
+        cell1b.setParent(this);
         label = new Label();
-        label.setParent(cell1);
+        label.setParent(cell1a);
         if (cellHeight != null) {
-            cell1.setHeight(cellHeight);
-            cell2.setHeight(cellHeight);
+            cell1a.setHeight(cellHeight);
+            cell1b.setHeight(cellHeight);
         }
 
         addEventListener(Events.ON_CREATE, (ev) -> myOnCreate());
@@ -306,7 +306,7 @@ public class CkEditor28 extends Row {
 
         setDropUploadVisibility(false);
 
-        groupboxForMediaData.setParent(cell2);
+        groupboxForMediaData.setParent(cell1b);
 
         if (form != null) {
             form.register(mediaTypeDataField);
@@ -378,7 +378,7 @@ public class CkEditor28 extends Row {
 
     public void setColspan1(int colspan1) {
         this.colspan1 = colspan1;
-        cell2.setColspan(colspan1);
+        cell1b.setColspan(colspan1);
     }
 
     public int getRows1() {
