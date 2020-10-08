@@ -97,6 +97,7 @@ public class Field28 extends Cell {
         Component dataField = idf != null ? idf.getComponent() : null;
         if (dataField != null) {
             dataField.setParent(this);
+            dataField.setVisible(this.isVisible());
             // also forward the onChange event to allow saving of changed data
             dataField.addEventListener(Events.ON_CHANGE, (ev) -> {
                 LOGGER.debug("onChange caught for {}, current value is {}", getId(), getValue());
@@ -188,6 +189,17 @@ public class Field28 extends Cell {
         if (idf instanceof GroupedDropdownDataField) {
             GroupedDropdownDataField field = (GroupedDropdownDataField) idf;
             field.setGroup(ref);
+        }
+    }
+    
+    @Override
+    public boolean setVisible(boolean visible) {
+        if (idf != null && idf.getComponent() != null) {
+            boolean old = idf.getComponent().isVisible();
+            idf.getComponent().setVisible(visible);
+            return old;
+        } else {
+            return super.setVisible(visible);
         }
     }
 }
