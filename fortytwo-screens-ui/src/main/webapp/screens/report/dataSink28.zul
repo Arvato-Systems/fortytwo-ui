@@ -62,6 +62,8 @@
                                           id2="baseClassPqon"           value2="@bind(vm.data.baseClassPqon)"/>
                                 <cells228 id ="writeTenantId"           value ="@bind(vm.data.writeTenantId)"
                                           id2="jaxbContextPath"         value2="@bind(vm.data.jaxbContextPath)"/>
+                                <cells228 id ="xmlHeaderElements"       value ="@bind(vm.data.xmlHeaderElements)"
+                                          id2="xmlFooterElements"       value2="@bind(vm.data.xmlFooterElements)"/>
 
                                 <cells228 id ="xmlNamespacePrefix"      value ="@bind(vm.data.xmlNamespacePrefix)"
                                           id2="xmlDefaultNamespace"     value2="@bind(vm.data.xmlDefaultNamespace)"/>
