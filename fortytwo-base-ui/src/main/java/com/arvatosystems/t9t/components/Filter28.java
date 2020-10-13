@@ -28,9 +28,11 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.KeyEvent;
 import org.zkoss.zk.ui.event.MouseEvent;
 import org.zkoss.zk.ui.select.annotation.Listen;
+import org.zkoss.zul.A;
 import org.zkoss.zul.Cell;
 import org.zkoss.zul.Column;
 import org.zkoss.zul.Columns;
+import org.zkoss.zul.Div;
 import org.zkoss.zul.Grid;
 import org.zkoss.zul.Row;
 import org.zkoss.zul.Rows;
@@ -62,10 +64,10 @@ public class Filter28 extends Grid implements IGridIdOwner {
     private final ApplicationSession session = ApplicationSession.get();
     private Button28 resetButton;
     private Button28 searchButton;
-    private Button28 toggleButton;
+    private A toggleButton;
     private final List<IField> filters = new ArrayList<IField>(15);
 
-    private int columnLength = 4;
+    private int columnLength = 1;
     private String gridId;
     private String viewModelId;
     private ILeanGridConfigResolver leanGridConfigResolver;
@@ -75,7 +77,8 @@ public class Filter28 extends Grid implements IGridIdOwner {
         super();
         LOGGER.debug("new Filter28() created");
         setVflex("min");
-        setSclass("grid");
+        setSclass("grid no-scrollbar no-padding");
+
     }
 
     @Override
@@ -85,21 +88,23 @@ public class Filter28 extends Grid implements IGridIdOwner {
         setViewModelId(GridIdTools.getViewModelIdByGridId(gridId));
 
         addColumns();
-        populateFilters();
+        populateFilters(0); //use default during init
     }
 
-    public void resetSearchFilters() {
+    public void resetSearchFilters(int gridPrefVariant) {
         super.removeChild(super.getRows());
-        populateFilters();
+        populateFilters(gridPrefVariant);
     }
 
-    private void populateFilters() {
-        leanGridConfigResolver = new LeanGridConfigResolver(gridId, session);
+    private void populateFilters(int gridPrefVariant) {
+        leanGridConfigResolver = new LeanGridConfigResolver(gridId, session, gridPrefVariant);
         addRows();
         resetButton.addEventListener (Events.ON_CLICK, (MouseEvent ev) -> { performReset(); });
         searchButton.addEventListener(Events.ON_CLICK, (MouseEvent ev) -> { performSearch("onClick"); });
         this.addEventListener(Events.ON_OK, (KeyEvent ev) -> { performSearch("onOk"); });
         if (toggleButton != null) {
+            toggleButton.setSclass("toggleButton");
+            toggleButton.setLabel(session.translate(Button28.PREFIX_BUTTON28, toggleButton.getId()));
             toggleButton.addEventListener(Events.ON_CLICK, (MouseEvent ev) -> {
                 Events.postEvent("onToSOLR", this, null);
             });
@@ -149,11 +154,36 @@ public class Filter28 extends Grid implements IGridIdOwner {
 
         // compose each component
         Row eachRow = new Row();
+        int index = 0;
+        // calculate the cols span
+        int colsSpan = columnLength - (index % columnLength);
+
+        // add buttons
+        Cell firstCell = new Cell();
+        firstCell.setColspan(colsSpan);
+        firstCell.setAlign("center");
+
+        // add search button
+        searchButton = new Button28();
+        searchButton.setId("searchButton");
+        //searchButton.setAutodisable("searchButton,newButton,saveButton,deleteButton,resetButton");
+        firstCell.appendChild(searchButton);
+
+        // add reset button
+        resetButton = new Button28();
+        resetButton.setId("resetButton");
+        //resetButton.setAutodisable("searchButton,newButton,saveButton,deleteButton,resetButton");
+        firstCell.appendChild(resetButton);
+
+        // append row into rows
+        eachRow.appendChild(firstCell);
 
         FieldFactory factory = new FieldFactory(crudViewModel, gridId, session);
 
-        int index = 0;
+        rows.appendChild(eachRow);
+
         for (UIFilter filter : leanGridConfigResolver.getFilters()) {
+            eachRow = new Row();
             String fieldname = filter.getFieldName();
             FieldDefinition fieldDef = FieldMappers.getFieldDefinitionForPath(fieldname, crudViewModel);
             // nope we need the list of components here, similar but different
@@ -167,48 +197,28 @@ public class Filter28 extends Grid implements IGridIdOwner {
                     Cell eachCell = new Cell();
                     eachCell.appendChild(c);
                     eachRow.appendChild(eachCell);
+                    eachCell.setSclass("filterCell");
                     // append and create new row when it has reached the column length
-                    if ((index + 1) % columnLength == 0) {
-                        rows.appendChild(eachRow);
-                        eachRow = new Row();
-                        eachRow.setVflex("min");
-                    }
-                    index++;
+                    rows.appendChild(eachRow);
+                    eachRow.setVflex("min");
                 }
             }
         }
 
-        // calculate the cols span
-        int colsSpan = columnLength - (index % columnLength);
-
-        // add buttons
-        Cell lastCell = new Cell();
-        lastCell.setColspan(colsSpan);
-        lastCell.setAlign("right");
-
-        // add search button
-        searchButton = new Button28();
-        searchButton.setId("searchButton");
-        //searchButton.setAutodisable("searchButton,newButton,saveButton,deleteButton,resetButton");
-        lastCell.appendChild(searchButton);
-
-        // add reset button
-        resetButton = new Button28();
-        resetButton.setId("resetButton");
-        //resetButton.setAutodisable("searchButton,newButton,saveButton,deleteButton,resetButton");
-        lastCell.appendChild(resetButton);
-
         if (crudViewModel.searchClass.getProperty("isSolr") != null) {
             // is SOLR
-            toggleButton = new Button28();
+            toggleButton = new A();
             toggleButton.setId("toggleButton");
             //resetButton.setAutodisable("searchButton,newButton,saveButton,deleteButton,resetButton");
-            lastCell.appendChild(toggleButton);
+            firstCell.appendChild(toggleButton);
         } else {
             toggleButton = null;
         }
-        // append row into rows
-        eachRow.appendChild(lastCell);
+        
+        Div div = new Div();
+        div.setStyle("height:20px;display:block;");
+        firstCell.appendChild(div);
+        
         rows.appendChild(eachRow);
 
         super.appendChild(rows);
@@ -247,3 +257,4 @@ public class Filter28 extends Grid implements IGridIdOwner {
         return session;
     }
 }
+

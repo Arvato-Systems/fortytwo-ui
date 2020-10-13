@@ -111,6 +111,7 @@ public final class ApplicationSession {
             CacheBuilder.newBuilder().expireAfterWrite(15L, TimeUnit.MINUTES).build();
     private final ConcurrentMap<String, Permissionset> permissionCache = new ConcurrentHashMap<>(100);
     private final List<Navi>                 navis = new ArrayList<Navi>();
+    private Long                             primaryTenant;
 
     public final List<Navi> getAllNavigations() {
         return navis;
@@ -521,6 +522,7 @@ public final class ApplicationSession {
             this.jwtInfo = null;
             this.jwt = null;
             this.authorizationHeader = null;
+            invalidateSession();
             LOGGER.debug("removed authentication information from current session");
         } else {
             LOGGER.debug("Storing new Jwt in ApplicationSession");
@@ -537,6 +539,7 @@ public final class ApplicationSession {
                 this.authorizationHeader = "Bearer " + jwt;
                 LOGGER.debug("received JWT with contents {} (json was {})", jwtInfo, json);
                 setDateFormatters(jwtInfo.getLocale(), jwtInfo.getZoneinfo());
+                invalidateInconsistentAuth(jwtInfo);
             } catch (Exception e) {
                 setJwt(null);
                 LOGGER.error("JWT parsing exception: {}", ExceptionUtil.causeChain(e));
@@ -712,6 +715,34 @@ public final class ApplicationSession {
         }
 
         return resource;
+    }
+    
+
+    /**
+     * Logout the current (shiro) authenticated user
+     */
+    private void invalidateSession() {
+        try {
+            if (SecurityUtils.getSubject() != null && SecurityUtils.getSubject().isAuthenticated()) {
+                SecurityUtils.getSubject().logout();
+            }
+        } catch (Exception e) {
+            LOGGER.error("Unable to logout the user due to: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * This method check if the logged in user is consistent with the user in token (to avoid security issue)
+     * @param jwtInfo
+     */
+    private void invalidateInconsistentAuth(JwtInfo jwtInfo) {
+        if (SecurityUtils.getSubject() != null && SecurityUtils.getSubject().getPrincipal() != null) {
+            String shiroAuthUser = SecurityUtils.getSubject().getPrincipal().toString();
+            if (jwtInfo.getUserId() == null ||  !shiroAuthUser.equals(jwtInfo.getUserId())) {
+                invalidateSession();
+            }
+        }
     }
 
 }

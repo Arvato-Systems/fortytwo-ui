@@ -408,19 +408,23 @@ public class ListHeadRenderer28 {
             @Override
             public void onEvent(Event closeEvent) throws Exception {
                 if (closeEvent.getData() != null) {
-                    //Looking for filter28 and update
-                    Filter28 filter28 = findFilter28Component(grid.getRoot());
-                    if (filter28 == null) {
-                        LOGGER.error("Unable to get Filter28 from windowComponent {} ", grid.getRoot().getId());
-                        return;
-                    }
-
-                    filter28.resetSearchFilters();
+                    findAndUpdateSearchFiltersComponent();
                 }
             }
         });
 
     }
+    
+    private void findAndUpdateSearchFiltersComponent() {
+        //Looking for filter28 and update
+          Filter28 filter28 = findFilter28Component(grid.getRoot());
+          if (filter28 == null) {
+              LOGGER.error("Unable to get Filter28 from windowComponent {} ", grid.getRoot().getId());
+              return;
+          }
+
+          filter28.resetSearchFilters(gridConfigResolver.getVariant());
+      }
 
     private Filter28 findFilter28Component(Component parent) {
         Filter28 f = null;

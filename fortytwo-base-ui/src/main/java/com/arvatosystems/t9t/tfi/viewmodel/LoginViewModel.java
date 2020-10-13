@@ -23,12 +23,13 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
+
 import javax.servlet.http.HttpServletRequest;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.zkoss.bind.Binder;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
@@ -40,6 +41,8 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.event.ClientInfoEvent;
 import org.zkoss.zk.ui.util.Clients;
+
+import com.arvatosystems.t9t.base.auth.PermissionEntry;
 import com.arvatosystems.t9t.tfi.general.ApplicationUtil;
 import com.arvatosystems.t9t.tfi.general.Constants;
 import com.arvatosystems.t9t.tfi.model.bean.ComboBoxItem;
@@ -47,7 +50,6 @@ import com.arvatosystems.t9t.tfi.services.IUserDAO;
 import com.arvatosystems.t9t.tfi.services.ReturnCodeException;
 import com.arvatosystems.t9t.tfi.web.ApplicationSession;
 import com.arvatosystems.t9t.tfi.web.ZulUtils;
-import com.arvatosystems.t9t.base.auth.PermissionEntry;
 import com.google.common.base.Strings;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
@@ -65,6 +67,7 @@ import de.jpaw.dp.Jdp;
 @ToClientCommand("realTimezone")
 public class LoginViewModel {
     private static final String LANGUAGE_COOKIE                     = "LANGUAGE_COOKIE";
+    private static final String USERNAME_COOKIE                     = "USERNAME_COOKIE";
     private static final Logger LOGGER                     = LoggerFactory.getLogger(LoginViewModel.class);
     protected final IUserDAO userDAO = Jdp.getRequired(IUserDAO.class);
 //    private static final ConcurrentMap<String, String>   screen = new ConcurrentHashMap<String, String>(100);
@@ -128,10 +131,17 @@ public class LoginViewModel {
     }
 
     @Command("login")
-    public void onLogin(@BindingParam("username") String username) {
+    public void onLogin(@BindingParam("username") String username, @BindingParam("rememberMe") boolean rememberMe) {
         LOGGER.debug("submit login for user name {}, last screen is {}, lang is {}", username, lastScreen,
                 Sessions.getCurrent().getAttribute(org.zkoss.web.Attributes.PREFERRED_LOCALE));
         if (username != null) {
+
+            if (rememberMe) {
+                ApplicationUtil.setCookie(USERNAME_COOKIE, username);
+            } else {
+                ApplicationUtil.setCookie(USERNAME_COOKIE, null);
+            }
+
             ApplicationUtil.setCookie(LANGUAGE_COOKIE, selected.getValue());
             USER_INFO_CACHE.put(username, new UserInfo(lastScreen, lastRealTz,
                     (Locale)(Sessions.getCurrent().getAttribute(org.zkoss.web.Attributes.PREFERRED_LOCALE)),
@@ -216,12 +226,12 @@ public class LoginViewModel {
     }
 
     private void setListbox() {
-        languageListModel.clear();
+         languageListModel.clear();
         Map<String, ComboBoxItem> items = new HashMap<String, ComboBoxItem>();
 
         String name = null;
         String value = null;
-        StringTokenizer st = new StringTokenizer(ZulUtils.i18nLabel("login.languagebox"), ",");
+        StringTokenizer st = new StringTokenizer(ZulUtils.translate("login", "languagebox"), ",");
         //Library.setProperty(Attributes.PREFERRED_TIME_ZONE, "GMT+02:00");
         Locale l = getLocale();
         String localeString = l.toString();
@@ -280,5 +290,9 @@ public class LoginViewModel {
 
     public final void setSelected(ComboBoxItem selected) {
         this.selected = selected;
+    }
+    
+    public String getUsername() {
+        return ApplicationUtil.getCookie(USERNAME_COOKIE);
     }
 }

@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import org.zkoss.util.resource.Labels;
 
 import com.arvatosystems.t9t.tfi.web.ApplicationSession;
+import com.arvatosystems.t9t.tfi.web.ZulUtils;
 
 public class JodaToDateConverter implements Converter {
     private static final Logger LOGGER               = LoggerFactory.getLogger(JodaToDateConverter.class);
@@ -44,7 +45,7 @@ public class JodaToDateConverter implements Converter {
 
         try {
             if (defaultDatePattern == null) {
-                String pattern = Labels.getLabel("com.date.format");
+                String pattern = ZulUtils.translate("com", "dateFormat");
                 if (pattern == null) {
                     pattern = DEFAULT_DATA_PATTERN;
                 }

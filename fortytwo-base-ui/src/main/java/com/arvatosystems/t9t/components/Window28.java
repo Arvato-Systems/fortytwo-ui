@@ -17,6 +17,7 @@ package com.arvatosystems.t9t.components;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Window;
 
 import com.arvatosystems.t9t.tfi.general.Constants;
@@ -53,8 +54,8 @@ public class Window28 extends Window { // implements IGridIdOwner {
         }
 
         LOGGER.debug("Setting Window28 id to {}", id);
-        String label = ApplicationSession.get().translate(null, id + ".title");
-        setTitle(label);
+//        String label = ApplicationSession.get().translate(null, id + ".title");
+//        setTitle(label);
     }
 
 //    public String getGridId() {

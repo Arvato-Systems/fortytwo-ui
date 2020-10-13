@@ -15,6 +15,8 @@
  */
 package com.arvatosystems.t9t.components;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zkoss.zk.ui.Component;
@@ -47,8 +49,6 @@ public class Modal28 extends Window {
     @Wire("#buttons")
     Hlayout hlayout;
 
-    private Component content;
-
     public Modal28() {
         super();
         LOGGER.debug("new Modal28() created");
@@ -74,8 +74,8 @@ public class Modal28 extends Window {
     @Listen("onCreate")
     public void onCreate() {
         // rearrange content: first step: move them to the right hierarchy
-        content = ComponentTools28.moveChilds(this, vlayout, vlayout);
-        LOGGER.debug("My IDs are {} / {} / {}", hlayout, vlayout, content);
+        List<Component> chilren = ComponentTools28.moveChilds(this, vlayout, vlayout);
+        LOGGER.debug("My IDs are {} / {} / {}", hlayout, vlayout, chilren);
         // rearrange content: second step: shuffle hlayout with buttons to the end
         vlayout.appendChild(hlayout);
         setMode(Mode.MODAL);

@@ -29,7 +29,7 @@ public class ComponentTools28 {
      * to a new parent. Returns the first such child.
      * This implementation uses a two phase approach, to avoid changing the live structure while we examine it.
      */
-    public static Component moveChilds(Component currentParent, Component markerChild, Component newParent) {
+    public static List<Component> moveChilds(Component currentParent, Component markerChild, Component newParent) {
         final List<Component> componentsToBeMoved = new ArrayList<Component>();
 
         // phase 0: simple plausi check
@@ -61,6 +61,6 @@ public class ComponentTools28 {
             for (Component c : componentsToBeMoved)
                 c.setParent(newParent);
         }
-        return componentsToBeMoved.get(0);
+        return componentsToBeMoved;
     }
 }

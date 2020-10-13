@@ -129,9 +129,14 @@ public class LeanGridConfigResolver implements ILeanGridConfigResolver {
     }
 
     public LeanGridConfigResolver(String gridId, ApplicationSession session) {
+        this(gridId, session, 0);
+    }
+
+    public LeanGridConfigResolver(String gridId, ApplicationSession session, int variant) {
         as = session;
         myGridId = gridId;
         myCrudViewModel = GridIdTools.getViewModelByGridId(gridId);
+        this.variant = variant;
 
         loadConfig();
     }
@@ -267,6 +272,11 @@ public class LeanGridConfigResolver implements ILeanGridConfigResolver {
         boolean isNowDescending = BooleanUtil.isTrue(gridPrefs.getSortDescending());
         return isNowDescending != wasDescending || !Objects.equal(oldSortColumn, gridPrefs.getSortColumn());
     }
+    
+    @Override
+    public int getVariant() {
+        return variant;
+    }
 
     @Override
     public void setVariant(int variant) {
@@ -333,13 +343,11 @@ public class LeanGridConfigResolver implements ILeanGridConfigResolver {
         gridPrefs.getFields().add(fieldname);
 
         FieldDefinition fd = FieldMappers.getFieldDefinitionForPath(fieldname, myCrudViewModel);
-        if (fd == null)  {
+        if (fd == null)
             LOGGER.error("Unresolvable field name in {}: {} for DTO {}", fieldname, myGridId, myCrudViewModel.dtoClass.getBonaPortableClass().getSimpleName());
-        } else {
-            pathToFieldDef.put(fieldname, fd);
-            allFieldDefs.add(fd);
-            widths.add(defaultWidth(fd));
-        }
+        pathToFieldDef.put(fieldname, fd);
+        allFieldDefs.add(fd);
+        widths.add(defaultWidth(fd));
         translations.add(as.translate(myGridId, fieldname));
     }
 
@@ -358,7 +366,8 @@ public class LeanGridConfigResolver implements ILeanGridConfigResolver {
         sanityCheck(index);
         gridPrefsModified = true;
         widths.set(index, isVisible ? defaultWidth(allFieldDefs.get(index)) : 0);
-        gridPrefs.setFieldWidths(widths);   // widths are no longer default...
+        if (!isVisible)
+            gridPrefs.setFieldWidths(widths);   // widths are no longer default...
     }
 
     @Override

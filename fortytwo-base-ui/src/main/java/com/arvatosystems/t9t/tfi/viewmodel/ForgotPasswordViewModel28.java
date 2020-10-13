@@ -61,7 +61,7 @@ public class ForgotPasswordViewModel28 extends AbstractViewOnlyVM<ResetPasswordR
     }
 
     public void postProcessHook() {
-        Messagebox.show(ApplicationSession.get().translate("resetPwd", "success"), ApplicationSession.get().translate(null, "loginSubTitle"), Messagebox.OK, null,
+        Messagebox.show(ApplicationSession.get().translate("resetPwd", "success"), ApplicationSession.get().translate("login", "title"), Messagebox.OK, null,
                 new EventListener<Event>() {
                     @Override
                     public void onEvent(Event event) throws Exception {

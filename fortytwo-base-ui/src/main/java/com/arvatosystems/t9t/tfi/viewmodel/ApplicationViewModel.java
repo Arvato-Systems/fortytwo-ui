@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import org.apache.shiro.SecurityUtils;
@@ -28,7 +27,6 @@ import org.apache.shiro.subject.Subject;
 import org.joda.time.Instant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.zkoss.bind.Binder;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
@@ -42,15 +40,27 @@ import org.zkoss.xel.fn.CommonFns;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.HtmlBasedComponent;
+import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.KeyEvent;
+import org.zkoss.zk.ui.event.OpenEvent;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
+import org.zkoss.zk.ui.util.Clients;
+import org.zkoss.zkmax.zul.Nav;
+import org.zkoss.zkmax.zul.Navbar;
+import org.zkoss.zkmax.zul.Navitem;
+import org.zkoss.zul.Messagebox;
+import org.zkoss.zul.Messagebox.ClickEvent;
 import org.zkoss.zul.Panel;
 import org.zkoss.zul.Panelchildren;
+import org.zkoss.zul.Style;
 import org.zkoss.zul.Window;
 
-import com.arvatosystems.t9t.authc.api.TenantDescription;
 import com.arvatosystems.t9t.component.fields.IField;
+import com.arvatosystems.t9t.components.Context28;
+import com.arvatosystems.t9t.components.tools.JumpTool;
+import com.arvatosystems.t9t.services.T9TRemoteUtils;
 import com.arvatosystems.t9t.tfi.general.ApplicationUtil;
 import com.arvatosystems.t9t.tfi.general.Constants;
 import com.arvatosystems.t9t.tfi.general.Constants.NaviConfig;
@@ -64,8 +74,8 @@ import com.arvatosystems.t9t.tfi.web.CtrlKeyHandler;
 import com.arvatosystems.t9t.tfi.web.ZulUtils;
 import com.google.common.collect.ImmutableMap;
 
+import de.jpaw.bonaparte.pojos.api.UnicodeFilter;
 import de.jpaw.dp.Jdp;
-
 /**
  * index View Model build the whole application.
  *
@@ -81,22 +91,29 @@ public class ApplicationViewModel {
     private Object selected;
     private Map<String, Panelchildren> naviContentMap = new HashMap<String, Panelchildren>();
     private boolean  previouslyCachingTypeWasCreateWithoutCaching=false;
-    @Wire("#panel")
-    private Panel panel;
+    private String previousNaviKey;
+
     private String whenLastLoggedIn;
     private Long pwdExpiresInDays = null;
     private Integer numberOfIncorrentAttempts;
     private String selectedTenantId;
     private final ApplicationSession as = ApplicationSession.get();
     private final IApplicationDAO applicationDAO = Jdp.getRequired(IApplicationDAO.class);
-    public final String APPLICATION_VERSION = ApplicationUtil.getVersionWithoutSnapshot();
 
     private String userName;
     private String userId;
     @SuppressWarnings("rawtypes")
     List<IField> filters;
     List<HtmlBasedComponent> htmlBasedFieldComponents;
-    private boolean isDefaultOrder;
+    private final int MAX_NUMBER_SUBMENU_ITEMS_PER_COLUMN = 13;
+
+    @Wire private Navbar navbar;
+    @Wire("#mainHome") private Window mainHome;
+    @Wire("#reverse")  private Style  reverse;
+    @Wire("#panel")    private Panel  panel;
+    public static String CTRL_KEYS;
+
+    private T9TRemoteUtils t9tRemoteUtils = Jdp.getRequired(T9TRemoteUtils.class);
 
     public ApplicationViewModel() {
 
@@ -130,6 +147,8 @@ public class ApplicationViewModel {
                 Double doublePwdExpires = Math.ceil(new Double(pwdExpiresInDays) / (1000 * 60 * 60 * 24));
                 pwdExpiresInDays = doublePwdExpires.longValue();
             }
+            
+            pwdExpiresInDays = 1l;
 
             LOGGER.info("New ApplicationViewModel created for user {}, now reading menu...", userId);
             as.readMenu();
@@ -137,27 +156,72 @@ public class ApplicationViewModel {
             //Reset all screens in hash for each new reloading the menus
             /*FT-808*/  naviContentMap = new HashMap<String, Panelchildren>();
             //          paramMap = new HashMap<String, Object>();
-            isDefaultOrder = Boolean.valueOf(ZulUtils.i18nLabel("isDefaultOrder"));
+            CTRL_KEYS = ZulUtils.i18nLabel("keys.ctrlKeys.ctrlKeys");
+        }
+    }
+    
+    @Command
+    public void changeTenant() {
+        List allowedTenants= as.getAllowedTenants();
+
+        if (allowedTenants.size() > 1) {
+                Map args = new HashMap();
+                args.put("isCancelClose", true);
+                args.put("isPopup", true);
+                final Window win = (Window) Executions.createComponents(Constants.ZulFiles.LOGIN_TENANT_SELECTION, null, args);
+                win.setClosable(true);
+                win.setMode(Window.MODAL);
+                win.doModal();
+                win.setSclass("embeddedTenantSelection");
         }
     }
 
     @AfterCompose
     public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
         Selectors.wireComponents(view, this, false);
+
+        boolean isDefaultOrder = Boolean.valueOf(ZulUtils.i18nLabel("isDefaultOrder"));
+        mainHome.setSclass(isDefaultOrder ? "": "reverse");
+        reverse.setSrc(!isDefaultOrder ? "/css/reverse.css" : "");
+        initHeaderMenu();
     }
 
-    @Command
-    public void onTenantClicked() {
-        List<TenantDescription> allowedTenants= ApplicationSession.get().getAllowedTenants();
+    private void initHeaderMenu() {
 
-        if (allowedTenants.size() > 1) {
-                Map<String, Object> args = new HashMap<String, Object>();
-                args.put("isCancelClose", true);
-                final Window win = (Window) Executions.createComponents(Constants.ZulFiles.LOGIN_TENANT_SELECTION, null, args);
-                win.setClosable(true);
-                win.setMode(Window.MODAL);
-                win.doModal();
+        final String CONTEXT_MENU_ID = "menu.ctx";
+        final String SET_AS_USER_DEFAULT_ID = "setAsUserDefault";
+        final String SET_AS_TENANT_DEFAULT_ID = "setAsTenantDefault";
+        final String RESET_USER_DEFAULT_ID = "resetUserDefault";
+        final String RESET_TENANT_DEFAULT_ID = "resetTenantDefault";
+
+        Context28 contextMenu = new Context28();
+        contextMenu.setId(CONTEXT_MENU_ID);
+        contextMenu.setContextOptions(SET_AS_USER_DEFAULT_ID + "," + SET_AS_TENANT_DEFAULT_ID + ",," + RESET_USER_DEFAULT_ID + "," + RESET_TENANT_DEFAULT_ID);
+        contextMenu.setParent(navbar.getParent());
+
+        //Register events for the menupopup/context menu
+        for (Component comp : navbar.getChildren()) {
+            if (comp instanceof Nav) {
+                Nav nav = (Nav) comp; 
+                nav.addEventListener(Events.ON_OPEN, ev -> {
+                    for (Component comp2 : ev.getTarget().getChildren()) {
+                        if (comp2 instanceof Navitem) {
+                            ((Navitem) comp2).setContext(CONTEXT_MENU_ID);
+                        }
+                    }
+                });
+            }
         }
+        
+        contextMenu.addEventListener(Events.ON_OPEN, ev -> {
+            Component comp = ((OpenEvent)ev).getReference();
+            if (comp instanceof Navitem) {
+                Navitem item = (Navitem) comp;
+                for (Component comp2 : contextMenu.getChildren()) {
+                    comp2.setAttribute("data-navi", item.getClientAttribute("data-navi"));
+                }
+            }
+        });
     }
 
     /**
@@ -290,10 +354,22 @@ public class ApplicationViewModel {
     }
 
     @Command
-    @NotifyChange({"selected"})
+    @NotifyChange({"selected", "screenTitle"})
     public final void setNaviSelection(@BindingParam("navi") Navi navi) {
         setSelected(navi);
     }
+
+    public final String getSubMenuClass(int childCount) {
+        
+        if (childCount > MAX_NUMBER_SUBMENU_ITEMS_PER_COLUMN) {
+            int i = childCount / MAX_NUMBER_SUBMENU_ITEMS_PER_COLUMN;
+            if (i > 1)
+                return "header-nav-submenu-" + i + "c";
+        }
+
+        return "";
+    }
+
     /**
      *
      * @param navi
@@ -307,9 +383,9 @@ public class ApplicationViewModel {
 
         panel.getChildren().clear();
 
-//        if (previouslyCachingTypeWasCreateWithoutCaching) {
-//            naviContentMap.clear();
-//        }
+        if(previouslyCachingTypeWasCreateWithoutCaching && previousNaviKey != null) {
+            naviContentMap.remove(previousNaviKey);
+        }
 
         as.setRequestParams(params);
 
@@ -324,11 +400,11 @@ public class ApplicationViewModel {
             previouslyCachingTypeWasCreateWithoutCaching=false;
         }
 
-        if (!naviContentMap.containsKey(key) ||
+        if (!naviContentMap.containsKey(key) ||	
                 (cachingType==Constants.Application.CachingType.CREATE_AND_CACH) ||
                 (cachingType==Constants.Application.CachingType.CREATE_WITHOUT_CACHING)) {
 
-            if (cachingType != Constants.Application.CachingType.CREATE_WITHOUT_CACHING) {
+            if (cachingType == Constants.Application.CachingType.CREATE_WITHOUT_CACHING) {
                 naviContentMap.remove(key); // clear the content map
             }
 
@@ -357,7 +433,13 @@ public class ApplicationViewModel {
             panel.setFocus(true);
         }
 
+        previousNaviKey = key;
+
         LOGGER.debug("----> {} {} {}","x", panel.getLastChild().getId(), panel.getLastChild().hashCode());
+
+        //set screen title
+        String command = String.format("setAppCurrentPageTitle('%s');", navi.getName());
+        Clients.evalJavaScript(command);
     }
     /*
      * @GlobalCommand("createLinkComponents") public final void
@@ -474,20 +556,37 @@ public class ApplicationViewModel {
         }
     }
 
-    /**
-     * @param contentDiv
-     *            the contentDiv to set
-     */
-    @Command
-    public final void setPanel(
-            @BindingParam("panel") Panel panel) {
-        this.panel = panel;
-
-        if (this.selected == null) {
-            // initial set selected to the first item
-            // setSelected(naviGroupingViewModel.getChild(0, 0));
-        }
+    @Command("changePwd")
+    @NotifyChange({"selected", "screenTitle"})
+    public void navigateToChangePasswordPage() {
+        //Create a dummy navi because it will be excluded from the menu configuration
+        Navi navi = new Navi();
+        navi.setNaviId("Session-Change Password");
+        navi.setPosition(95);
+        navi.setCategory("Session");
+        navi.setName("Change Password");
+        navi.setLink("screens/session/change_pwd.zul");
+        navi.setHierarchy(0);
+        navi.setPermission("changePasswordScreen");
+        
+        setNaviSelection(navi);
     }
+
+//    /**
+//     * @param contentDiv
+//     *            the contentDiv to set
+//     */
+//    @Command
+//    public final void setPanel(
+//            @BindingParam("panel") Panel panel) {
+//        this.panel = panel;
+//
+//        if (this.selected == null) {
+//            // initial set selected to the first item
+//            // setSelected(naviGroupingViewModel.getChild(0, 0));
+//            initDefaultScreen();
+//        }
+//    }
     /**
      * @return the selectedTenantId
      */
@@ -527,11 +626,63 @@ public class ApplicationViewModel {
         return as.getTenantResource(resource);
     }
 
-    public boolean isDefaultOrder() {
-        return isDefaultOrder;
+    @Command("search")
+    public void searchOrder(@BindingParam("self_value") String searchText) {
+        UnicodeFilter f = new UnicodeFilter("deliveryOrderId");
+        f.setLikeValue(searchText);
+        JumpTool.jump("screens/delivery/deliveryOrder28.zul", f, null);
     }
 
-    public void setDefaultOrder(boolean isDefaultOrder) {
-        this.isDefaultOrder = isDefaultOrder;
+    /**
+     * To check if subtitle should be display based on the menus iteration
+     * if there is a new subtitle compared to the previous one, return true
+     * 
+     * @param index
+     * @param childIndex
+     * @return
+     */
+    public boolean subtitleShouldDisplay(int index, int childIndex) {
+
+        if (childIndex != 0) {
+            if (naviGroupingViewModel.getChild(index, childIndex).getSubcategory() != null && 
+                    naviGroupingViewModel.getChild(index, childIndex).getSubcategory() != 
+                    naviGroupingViewModel.getChild(index, childIndex - 1).getSubcategory()) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return naviGroupingViewModel.getChild(index, childIndex).getSubcategory() != null;
+        }
+    }
+
+    /**
+     * This method is called from javascript to show the warning when the session is about to expired.
+     */
+    @Command
+    public void showSessionExpirationWarning() {
+        Messagebox.show(as.translate("session", "timeoutMessage"), as.translate("session", "timeout"),
+                new Messagebox.Button[] { Messagebox.Button.NO, Messagebox.Button.OK },
+                new String[] { as.translate("session", "exit"), as.translate("session", "continue") },
+                null, Messagebox.Button.OK, new EventListener<ClickEvent>() {
+                    @Override
+                    public void onEvent(ClickEvent evt) throws Exception {
+                        if (evt.getName().equals(Messagebox.ON_NO)) {
+                            logout();
+                        } else if (evt.getName().equals(Messagebox.ON_OK)) {
+                            Clients.evalJavaScript("keepSessionAlive();");
+                        }
+                    }
+                });
+    }
+
+    /**
+     * This method is called from javascript to logout the user when the session is expired.
+     */
+    @Command
+    public void logout() {
+        Executions.sendRedirect(Constants.ZulFiles.LOGOUT);
     }
 }
+
+

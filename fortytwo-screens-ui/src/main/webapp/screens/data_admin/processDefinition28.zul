@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?init class="com.arvatosystems.t9t.tfi.web.WorkbenchInit" pagename="processDefinition28"?>
-
+<?xel-method prefix="l"  name="translate"  class="com.arvatosystems.t9t.tfi.web.ZulUtils" signature="String translate(String, String)"?>
 <window28 id="processDefinitionWin">
     <threesections28 gridId="processDefinition" vflex2="2" vflex3="5">
         <crud28
@@ -58,13 +58,13 @@
                             </vbox>
                             <listbox span="true" id="processListBox" sizedByContent="true" vflex="1" hflex="true"
                                 model="@load(vm.uiOnlyWorkflowSteps)" selectedItem="@save(vm.uiOnlyWorkflowStep)"
-                                emptyMessage="${l:i18nLabel('com.no.data.found')}"
+                                emptyMessage="${l:translate('com','noDataFound')}"
                                 pagingPosition="bottom" nonselectableTags="" >
                                 <listhead menupopup="auto" sizable="true" columnsgroup="false">
-                                    <listheader  label="${l:i18nLabel('processDefinition.label')}*" sort="auto(label)"    hflex="1" />
-                                    <listheader  label="${l:i18nLabel('processDefinition.comment')}" sort="auto(comment)"  hflex="1" />
-                                    <listheader  label="${l:i18nLabel('processDefinition.type')}" hflex="1" />
-                                    <listheader  label="${l:i18nLabel('processDefinition.data')}" hflex="3    "/>
+                                    <listheader  label="${l:translate('processDefinition','label')}*" sort="auto(label)"    hflex="1" />
+                                    <listheader  label="${l:translate('processDefinition','comment')}" sort="auto(comment)"  hflex="1" />
+                                    <listheader  label="${l:translate('processDefinition','type')}" hflex="1" />
+                                    <listheader  label="${l:translate('processDefinition','data')}" hflex="3    "/>
                                 </listhead>
                                 <template name="model">
                                     <listitem>

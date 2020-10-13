@@ -152,6 +152,44 @@ public class ZulUtils {
         Locale userLocale = ApplicationSession.get().getUserLocale();
         return MessageFormats.format(result1, arguments, userLocale);
     }
+    
+    /**
+     * translation a key without a path. 
+     * @param key
+     * @return String
+     */
+    public static String translate(String key) {
+        return translate(null, key);
+    }
+    
+    /**
+     * translate a key with a path
+     * @param path
+     * @param key
+     * @return String
+     */
+    public static String translate(String path, String key) {
+        return translate(path, key, "");
+    }
+    
+    /**
+     * translate a key with path with stringify arguments
+     * @param path
+     * @param key
+     * @param args
+     * @return
+     */
+    public static String translate(String path, String key, String args) {
+        Object[] arguments = args == null || args == "" ? null : args.replace("{", "").replace("}", "").split(",");
+        return translate(path, key, arguments);
+    }
+    
+    public static String translate(String path, String key, Object[] arguments) {
+        String result = ApplicationSession.get().translate(path, key, arguments);
+        LOGGER.debug("translate({}) with path {} with arguments {} returns {}", key, path, arguments, result);
+        return result != null ? result : "{" + key + "}";
+    }
+
 
     /**
      * @param label
@@ -507,7 +545,7 @@ public class ZulUtils {
             if (retunValue == null) {
                 LOGGER.error("ERROR: "+returnCodeException.getReturnMessage());
                 retunValue = new ErrorPopupEntity();
-                retunValue.setPopupTitle(ZulUtils.i18nLabel("err.title"));
+                retunValue.setPopupTitle(ZulUtils.translate("err", "title"));
                 retunValue.setPopupImg("~./zul/img/msgbox/stop-btn.png");
                 retunValue.setReturnCode(String.valueOf(returnCodeException.getReturnCode()));
                 retunValue.setReturnMessage(returnCodeException.getReturnMessage());
@@ -527,7 +565,7 @@ public class ZulUtils {
                     ExceptionUtil.causeChain(returnCodeException),
                     ExceptionUtil.causeChain(e));
             retunValue = new ErrorPopupEntity();
-            retunValue.setPopupTitle(ZulUtils.i18nLabel("err.title"));
+            retunValue.setPopupTitle(ZulUtils.translate("err","title"));
             retunValue.setPopupImg("~./zul/img/msgbox/stop-btn.png");
             retunValue.setReturnCode(String.valueOf(Constants.ErrorCodes.GENERAL_EXCEPTION));
             retunValue.setReturnMessage("general error");

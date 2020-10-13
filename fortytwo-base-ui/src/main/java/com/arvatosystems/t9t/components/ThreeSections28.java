@@ -15,10 +15,16 @@
  */
 package com.arvatosystems.t9t.components;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.select.annotation.Listen;
+import org.zkoss.zul.Borderlayout;
+import org.zkoss.zul.Center;
+import org.zkoss.zul.North;
+import org.zkoss.zul.West;
 
 import com.arvatosystems.t9t.component.ext.EventDataSelect28;
 import com.arvatosystems.t9t.component.ext.IDataSelectReceiver;
@@ -27,7 +33,6 @@ public class ThreeSections28 extends TwoSections28 {
     private static final long serialVersionUID = -2739908309693945324L;
     private static final Logger LOGGER = LoggerFactory.getLogger(ThreeSections28.class);
     protected Groupbox28 detailsGroup;
-    protected Component detailsSection;
 
     public ThreeSections28() {
         super();
@@ -35,7 +40,12 @@ public class ThreeSections28 extends TwoSections28 {
         detailsGroup = new Groupbox28();
         detailsGroup.setVflex("1");
         detailsGroup.setId("detailsGroup");
-        detailsGroup.setParent(this);
+        detailsGroup.setSclass("detailsSection");
+        Borderlayout bl = (Borderlayout) resultsGroup.getParent().getParent().getParent();
+        ((North) bl.getFirstChild()).setHeight("50%"); //override the height to 50% for three sections
+        Center center = new Center();
+        center.setParent(bl);
+        detailsGroup.setParent(center); //To attached to the bottom of result panel
     }
 
     @Override
@@ -43,25 +53,27 @@ public class ThreeSections28 extends TwoSections28 {
     public void onCreate() {
         super.onCreate();
         // move all childs of this after the last groupbox into the last groupbox
-        detailsSection = ComponentTools28.moveChilds(this,  detailsGroup, detailsGroup);
-        if (detailsSection != null) {
-            if (detailsSection instanceof IDataSelectReceiver) {
-                final IDataSelectReceiver recv = (IDataSelectReceiver)detailsSection;
-                // wire events
-                main.addEventListener(EventDataSelect28.ON_DATA_SELECT, ev -> {
-                    final EventDataSelect28 evData = (EventDataSelect28)ev.getData();
-                    LOGGER.debug("Caught DATA_SELECT event of grid");
-                    recv.setSelectionData(evData);
+        List<Component> children = ComponentTools28.moveChilds(this, this.getFirstChild(), detailsGroup);
+        if (children != null && !children.isEmpty()) {
+            for (Component child : children) {
+                if (child instanceof IDataSelectReceiver) {
+                    final IDataSelectReceiver recv = (IDataSelectReceiver) child;
+                    // wire events
+                    main.addEventListener(EventDataSelect28.ON_DATA_SELECT, ev -> {
+                        final EventDataSelect28 evData = (EventDataSelect28) ev.getData();
+                        LOGGER.debug("Caught DATA_SELECT event of grid");
+                        recv.setSelectionData(evData);
                 });
-                // wire a changed content of a possible crud section to row refresh
-                detailsSection.addEventListener("onCrudUpdate", ev -> {
-                    if (Boolean.TRUE.equals(ev.getData()))
-                        main.refreshCurrentItem();  // single row change
-                    else
-                        main.search();  // structural change: data has been added or deleted
-                });
-            } else {
-                LOGGER.error("Details section is not known as ISelectionReceiver, cannot forward select events");
+                    // wire a changed content of a possible crud section to row refresh
+                    child.addEventListener("onCrudUpdate", ev -> {
+                        if (Boolean.TRUE.equals(ev.getData()))
+                            main.refreshCurrentItem(); // single row change
+                        else
+                            main.search(); // structural change: data has been added or deleted
+                    });
+                } else {
+                    LOGGER.error("Details section is not known as ISelectionReceiver, cannot forward select events");
+                }
             }
         }
     }
@@ -73,5 +85,14 @@ public class ThreeSections28 extends TwoSections28 {
 
     public void setVflex3(String vflex) {
         detailsGroup.setVflex(vflex);
+    }
+    
+    @Override
+    public void setVlayoutVisible(boolean visible) {
+        super.setVlayoutVisible(visible);
+        detailsGroup.setTitle(null);              //To reduce the space being taken by the title.
+        detailsGroup.setSclass("no-padding-top"); //To reduce the space being taken by the title.
+        ((North) resultsGroup.getParent().getParent()).setVisible(false);
+        ((West)  filterGroup.getParent()).setVisible(false);
     }
 }

@@ -36,14 +36,14 @@ public class DateUtils {
 
     private static SimpleDateFormat getDateFormat() {
         if (dateFormat == null) {
-            dateFormat = new SimpleDateFormat(ZulUtils.i18nLabel("com.date.format"));
+            dateFormat = new SimpleDateFormat(ZulUtils.translate("com","dateFormat"));
         }
         return dateFormat;
     }
 
     private static SimpleDateFormat getDateTimeFormat() {
         if (dateTimeFormat == null) {
-            dateTimeFormat = new SimpleDateFormat(ZulUtils.i18nLabel("com.datetime.format"));
+            dateTimeFormat = new SimpleDateFormat(ZulUtils.translate("com","datetimeFormat"));
         }
         return dateTimeFormat;
     }

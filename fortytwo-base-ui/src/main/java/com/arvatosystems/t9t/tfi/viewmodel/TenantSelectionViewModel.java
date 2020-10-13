@@ -81,7 +81,6 @@ public class TenantSelectionViewModel {
 
     private void setSessionData() {
         allowedTenants = ApplicationSession.get().getAllowedTenants();
-
     }
 
     /**
@@ -130,7 +129,7 @@ public class TenantSelectionViewModel {
     @Command
     public final void redirect() {
         if (getSelected() == null) {
-            throw new WrongValueException(ZulUtils.i18nLabel("tenant.choose"));
+            throw new WrongValueException(ZulUtils.translate("tenant", "choose"));
         }
 
         ApplicationUtil.setCookie(TENANT_COOKIE, selected.getTenantId());
@@ -144,7 +143,7 @@ public class TenantSelectionViewModel {
             ApplicationSession.get().storePermissions(userPermissionForThisTenant);
         } catch (ReturnCodeException e) {
            LOGGER.error("Unable to switch tenant or to get permissions " + e);
-           Messagebox.show("Unable to switch tenant or to get permissions - " + e.getReturnCodeMessage() + ZulUtils.i18nLabel("err.unableToSwitchTenant"), ZulUtils.i18nLabel("err.title"), Messagebox.OK, Messagebox.ERROR);
+           Messagebox.show("Unable to switch tenant or to get permissions - " + e.getReturnCodeMessage() + ZulUtils.translate("err", "unableToSwitchTenant"), ZulUtils.translate("err", "title"), Messagebox.OK, Messagebox.ERROR);
            return;
         }
         Executions.getCurrent().sendRedirect(Constants.ZulFiles.HOME);

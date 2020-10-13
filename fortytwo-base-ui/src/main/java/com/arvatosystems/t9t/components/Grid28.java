@@ -222,7 +222,7 @@ public class Grid28 extends Div implements IGridIdOwner, IPermissionOwner {
         defaultListItemRenderer = new ListItemRenderer28<>(crudViewModel.dtoClass, true);
         defaultListHeadRenderer = new ListHeadRenderer28(defaultListItemRenderer, leanGridConfigResolver, this, lb, permissions, listHeaders, crudViewModel.dtoClass);
         lb.setItemRenderer(defaultListItemRenderer);
-        lb.setEmptyMessage(ZulUtils.i18nLabel("com.no.data.found"));
+        lb.setEmptyMessage(ZulUtils.translate("com","noDataFound"));
 
         defaultListHeadRenderer.createListhead(lb);
         defaultListHeadRenderer.redrawListbox();

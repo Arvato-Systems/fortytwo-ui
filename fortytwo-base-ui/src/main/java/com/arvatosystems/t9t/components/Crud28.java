@@ -35,7 +35,6 @@ import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Hlayout;
 import org.zkoss.zul.Vlayout;
 
-import com.arvatosystems.t9t.tfi.web.ApplicationSession;
 import com.arvatosystems.t9t.base.CrudViewModel;
 import com.arvatosystems.t9t.component.ext.EventDataSelect28;
 import com.arvatosystems.t9t.component.ext.IDataSelectReceiver;
@@ -43,14 +42,15 @@ import com.arvatosystems.t9t.component.ext.IViewModelOwner;
 import com.arvatosystems.t9t.components.crud.AbstractCrudVM;
 import com.arvatosystems.t9t.components.crud.AbstractCrudVM.CrudMode;
 import com.arvatosystems.t9t.components.crud.ICrudNotifier;
+import com.arvatosystems.t9t.tfi.web.ApplicationSession;
 import com.google.common.collect.ImmutableMap;
 
 import de.jpaw.bonaparte.core.BonaPortable;
 import de.jpaw.bonaparte.core.BonaPortableClass;
+import de.jpaw.bonaparte.pojos.api.DataWithTracking;
 import de.jpaw.bonaparte.pojos.api.OperationType;
 import de.jpaw.bonaparte.pojos.api.TrackingBase;
 import de.jpaw.bonaparte.pojos.api.auth.Permissionset;
-import de.jpaw.bonaparte.pojos.api.DataWithTracking;
 import de.jpaw.bonaparte.pojos.meta.FieldDefinition;
 
 /** The Crud28 component also serves as the ViewModel for crud screens. The actual data is the BonaPortable field.
@@ -142,20 +142,23 @@ public class Crud28 extends Vlayout implements IViewModelOwner, IDataSelectRecei
             viewModelInstance.setHardLink(this);
         }
         // move contents and wire events: A row selected event has to be forwarded to the contents of this component
-        Component child = ComponentTools28.moveChilds(this, crudButtons, null);
-        if (child != null) {
+        List<Component> children = ComponentTools28.moveChilds(this, crudButtons, null);
+        if (children != null && !children.isEmpty()) {
             // move it up to be the first child
-            insertBefore(child, crudButtons);
-            if (child instanceof IDataSelectReceiver) {
-                detailsSection = (IDataSelectReceiver)child;
-                // wire events
-                // avoid NPE
-                DataWithTracking<BonaPortable, TrackingBase> initialDwt = new DataWithTracking<BonaPortable, TrackingBase>();
-                initialDwt.setData(crudViewModel.dtoClass.newInstance());
-                EventDataSelect28 initial = new EventDataSelect28(initialDwt, 0, null);
-                detailsSection.setSelectionData(initial);
+            for (Component child : children) {
+                insertBefore(child, crudButtons);
+                if (child instanceof IDataSelectReceiver) {
+                    detailsSection = (IDataSelectReceiver) child;
+                    // wire events
+                    // avoid NPE
+                    DataWithTracking<BonaPortable, TrackingBase> initialDwt = new DataWithTracking<BonaPortable, TrackingBase>();
+                    initialDwt.setData(crudViewModel.dtoClass.newInstance());
+                    EventDataSelect28 initial = new EventDataSelect28(initialDwt, 0, null);
+                    detailsSection.setSelectionData(initial);
+                    }
+                // throw new RuntimeException("Child of Crud28 must be a IDataSelectReceiver,
+                // but is " + child.getClass().getSimpleName());
             }
-            // throw new RuntimeException("Child of Crud28 must be a IDataSelectReceiver, but is " + child.getClass().getSimpleName());
         }
 
         // wire events to commands

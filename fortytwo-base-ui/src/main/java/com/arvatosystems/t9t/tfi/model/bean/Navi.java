@@ -31,12 +31,14 @@ public class Navi {
     private boolean closeGroup = false;
     private boolean menuItemVisible=true;
     private String  img;
+    private String  subcategory;
 
-    public Navi(String naviId, int position, String category, String name, String link, int hierarchy, String permission, boolean closeGroup, boolean menuItemVisible,String img) {
+    public Navi(String naviId, int position, String category, String subcategory, String name, String link, int hierarchy, String permission, boolean closeGroup, boolean menuItemVisible,String img) {
         super();
         this.naviId = naviId;
         this.position = position;
         this.category = category;
+        this.subcategory = subcategory;
         this.name = name;
         this.link = link;
         this.hierarchy = hierarchy;
@@ -157,6 +159,14 @@ public class Navi {
     public void setNaviId(String naviId) {
         this.naviId = naviId;
     }
+    
+    public String getSubcategory() {
+        return subcategory;
+    }
+
+    public void setSubcategory(String subcategory) {
+        this.subcategory = subcategory;
+    }
 
     /* (non-Javadoc)
      * @see java.lang.Object#toString()
@@ -164,7 +174,7 @@ public class Navi {
     @Override
     public String toString() {
         return "Navi [naviId=" + naviId + ", position=" + position
-                + ", category=" + category + ", name=" + name + ", link="
+                + ", category=" + category + ", subcategory=\" + subcategory + \", name=" + name + ", link="
                 + link + ", hierarchy=" + hierarchy + ", permission="
                 + permission + ", closeGroup=" + closeGroup
                 + ", menuItemVisible=" + menuItemVisible + ", img=" + img + "]";

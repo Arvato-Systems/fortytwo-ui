@@ -75,7 +75,7 @@ public abstract class AbstractViewModel extends FormValidator {
                     if ((null == ctx.getProperty().getValue()) || "".equals(ctx.getProperty().getValue())) {
                         LOGGER.debug("FIELD isEMPTY: {}", logMessage);
                         addInvalidMessage(ctx, "EMPTY");
-                        Clients.wrongValue(ctx.getBindContext().getComponent(), ZulUtils.i18nLabel("err.fieldNotEmpty"));
+                        Clients.wrongValue(ctx.getBindContext().getComponent(), ZulUtils.translate("err", "fieldNotEmpty"));
                     }
                 } else {
                     if (StringUtils.isNotBlank(ctx.getBindContext().getComponent().getId())) {
@@ -85,29 +85,6 @@ public abstract class AbstractViewModel extends FormValidator {
             }
         };
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     private int              visibilityDepth      = 0;
     private static final int VISIBILITY_MAX_DEPTH = 5;

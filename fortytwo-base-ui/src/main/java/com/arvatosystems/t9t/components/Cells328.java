@@ -49,7 +49,8 @@ import de.jpaw.bonaparte.util.FieldGetter;
 // if more flexibility is required
 @ComponentAnnotation({
     "value:@ZKBIND(ACCESS=both,SAVE_EVENT=onChange)",
-    "value2:@ZKBIND(ACCESS=both,SAVE_EVENT=onChange)"
+    "value2:@ZKBIND(ACCESS=both,SAVE_EVENT=onChange)",
+    "value3:@ZKBIND(ACCESS=both,SAVE_EVENT=onChange)"
 })
 public class Cells328 extends Cells228 {
     private static final long serialVersionUID = -770193551161940L;

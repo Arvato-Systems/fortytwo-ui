@@ -59,7 +59,7 @@ public class MultilineJSon extends Textbox implements IdSpace, AfterCompose  {
                     try {
                         new JsonParser(componentValue, false).parseObject();
                     } catch (JsonException ex) {
-                        throw new WrongValueException(comp, ZulUtils.i18nLabel("err.invalidJsonFormat"));
+                        throw new WrongValueException(comp, ZulUtils.translate("err","invalidJsonFormat"));
                     }
                 }
             }

@@ -19,10 +19,10 @@
                         <cell>
                             <textbox id="solrText" maxlength="256" hflex="1" />
                         </cell>
-                        <cell align="right">
+                        <cell align="left">
                             <button28 id="searchButton2"/>
                             <button28 id="resetButton2"/>
-                            <button28 id="toggleButton2"/>
+                            <a id="toggleButton2" sclass="toggleButton"/>
                         </cell>
                     </row>
                 </rows>

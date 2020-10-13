@@ -51,6 +51,7 @@ public interface ILeanGridConfigResolver {
     /** Hides a field from the grid (it is not removed, just not displayed) or restores it. */
     void setVisibility(int index, boolean isVisible);
 
+    int getVariant();
     void setVariant(int variant);
     void save(boolean asTenantDefault);
     void deleteConfig(boolean tenantDefault);

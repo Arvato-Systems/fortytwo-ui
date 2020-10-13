@@ -232,7 +232,7 @@ public class TwoSections28 extends Vlayout implements IGridIdOwner, IPermissionO
     }
 
     public void setFilterGroupVisible(boolean visible) {
-        filterGroup.setVisible(visible);
+        filterGroup.getParent().setVisible(visible);
     }
     public void isFilterGroupVisible() {
         filterGroup.isVisible();

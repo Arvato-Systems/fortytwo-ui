@@ -17,7 +17,6 @@ package com.arvatosystems.t9t.components;
 
 import org.zkoss.zul.Button;
 
-import com.arvatosystems.t9t.base.FieldMappers;
 import com.arvatosystems.t9t.tfi.web.ApplicationSession;
 
 import de.jpaw.bonaparte.pojos.api.OperationType;
@@ -33,8 +32,7 @@ public class Button28 extends Button {
 
     public Button28() {
         super();
-        setHeight(session.translate(PREFIX_BUTTON28, "height"));
-        setWidth(session.translate(PREFIX_BUTTON28, "width"));
+        setSclass("button28");
     }
 
     /** The Button28 setImage() method disables the automatic label translation, if used before setId(). */
@@ -48,10 +46,8 @@ public class Button28 extends Button {
     @Override
     public void setId(String id) {
         super.setId(id);
-        if (autoLabel) {
-            String strippedFieldname = FieldMappers.stripIndexes(id);
-            setLabel(session.translate(PREFIX_BUTTON28, strippedFieldname));
-        }
+        if (autoLabel)
+            setLabel(session.translate(PREFIX_BUTTON28, id));
     }
 
     public String getResourceId() {

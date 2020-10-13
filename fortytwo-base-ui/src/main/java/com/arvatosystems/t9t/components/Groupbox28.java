@@ -37,8 +37,8 @@ public class Groupbox28 extends Groupbox{
         // Executions.createComponents("/component/groupbox28.zul", this, null);
         // setVflex("1");
         // setHflex("1");
-        setWidth("100%");
-        setClosable(true);
+        //setWidth("100%");
+        setClosable(false);
         setSclass("caption");
 
         addEventListener(Events.ON_OPEN, new EventListener<OpenEvent>() {

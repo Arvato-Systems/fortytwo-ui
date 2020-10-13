@@ -1,9 +1,9 @@
-<?xel-method prefix="l"  name="i18nLabel"  class="com.arvatosystems.t9t.tfi.web.ZulUtils" signature="String i18nLabel(String)"?>
+<?xel-method prefix="l"  name="translate"  class="com.arvatosystems.t9t.tfi.web.ZulUtils" signature="String translate(String, String)"?>
 <zk>
 
 <window title="${vm.paramGeneralErrorMessage.getPopupTitle() }" mode="modal" sclass="z-messagebox-window" border="normal" width="450px"
         sizable="true" viewModel="@id('vm') @init('com.arvatosystems.t9t.tfi.viewmodel.ErrorViewModel')">
-        <vbox hflex="true" spacing="5px">
+        <vbox hflex="true" spacing="5px" style="padding-top: 30px">
             <hbox>
                 <image src="${vm.paramGeneralErrorMessage.getPopupImg()}" />
                 <label value="${vm.paramGeneralErrorMessage.getReturnMessage()}" visible="${not empty vm.paramGeneralErrorMessage.getReturnMessage()}"    multiline="true" />
@@ -11,13 +11,13 @@
             <separator bar="true" hflex="true" orient="horizontal" />
             <hbox>
                 <div>
-                    <label value="${l:i18nLabel('err.code')}" />
+                    <label value="${l:translate('err','code')}" />
                     <label value="${vm.paramGeneralErrorMessage.getReturnCode()}" />
                 </div>
             </hbox>
             <hbox visible="${not empty vm.paramGeneralErrorMessage.getErrorDetails()}" hflex="true">
                 <div>
-                    <label value="${l:i18nLabel('err.details')}" />
+                    <label value="${l:translate('err','details')}" />
                     <label value="${vm.paramGeneralErrorMessage.getErrorDetails()}" hflex="true" vflex="true"/>
                 </div>
             </hbox>
