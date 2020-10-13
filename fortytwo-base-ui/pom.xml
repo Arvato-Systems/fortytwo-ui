@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.arvato-systems.t9t</groupId>
         <artifactId>fortytwo-settings-ui</artifactId>
-        <version>4.16-SNAPSHOT</version>
+        <version>5.0-SNAPSHOT</version>
         <relativePath>../fortytwo-settings-ui</relativePath>
     </parent>
 
@@ -108,7 +108,16 @@
             <groupId>org.zkoss.common</groupId>
             <artifactId>zel</artifactId>
         </dependency>
-        <dependency>
+        <!-- ZK additional dependencies -->
+		<dependency>
+			<groupId>org.zkoss.zk</groupId>
+			<artifactId>zuti</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.zkoss.zk</groupId>
+			<artifactId>zkmax</artifactId>
+		</dependency>
+		<dependency>
             <groupId>org.zkoss.common</groupId>
             <artifactId>zcommon</artifactId>
             <exclusions>
