@@ -14,6 +14,9 @@
     limitations under the License.
 ====
 
+
+This repository is discontinued. The code has been migrated into t9t.
+
 1) Add application_logo.png and company_logo.png into src/main/webapp/img/logo/ for the logo to be displayed in Login screen.
 2) Set version in src/main/webapp/WEB-INF/resources/configuration.properties to display version of the customization
 3) to set sub.title on login page/ forgot password and tenant selection page. add 'login.sub.title' key into your label.properties
