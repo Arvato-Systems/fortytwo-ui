@@ -52,13 +52,13 @@
                     visible="@load(isCancelClose)" />
             </hbox>
             <div sclass="login-error"><label value="${l:translate('err','loginFailed')}" visible="${not empty requestScope.loginFailure}"/></div>
-               
+
                  <div>
                         <div>
                             <span sclass="version h6">
                                 ${desktop.webApp.version} - build ${desktop.webApp.build}
                             </span>
-                            
+
                             <span sclass="h6">© Arvato Systems GmbH</span>
                         </div>
                         </div>

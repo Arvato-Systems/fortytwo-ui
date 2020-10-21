@@ -152,16 +152,16 @@ public class ZulUtils {
         Locale userLocale = ApplicationSession.get().getUserLocale();
         return MessageFormats.format(result1, arguments, userLocale);
     }
-    
+
     /**
-     * translation a key without a path. 
+     * translation a key without a path.
      * @param key
      * @return String
      */
     public static String translate(String key) {
         return translate(null, key);
     }
-    
+
     /**
      * translate a key with a path
      * @param path
@@ -171,7 +171,7 @@ public class ZulUtils {
     public static String translate(String path, String key) {
         return translate(path, key, "");
     }
-    
+
     /**
      * translate a key with path with stringify arguments
      * @param path
@@ -183,7 +183,7 @@ public class ZulUtils {
         Object[] arguments = args == null || args == "" ? null : args.replace("{", "").replace("}", "").split(",");
         return translate(path, key, arguments);
     }
-    
+
     public static String translate(String path, String key, Object[] arguments) {
         String result = ApplicationSession.get().translate(path, key, arguments);
         LOGGER.debug("translate({}) with path {} with arguments {} returns {}", key, path, arguments, result);

@@ -414,7 +414,7 @@ public class ListHeadRenderer28 {
         });
 
     }
-    
+
     private void findAndUpdateSearchFiltersComponent() {
         //Looking for filter28 and update
           Filter28 filter28 = findFilter28Component(grid.getRoot());

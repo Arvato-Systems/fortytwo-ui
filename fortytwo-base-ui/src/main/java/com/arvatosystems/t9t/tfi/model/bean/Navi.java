@@ -159,7 +159,7 @@ public class Navi {
     public void setNaviId(String naviId) {
         this.naviId = naviId;
     }
-    
+
     public String getSubcategory() {
         return subcategory;
     }

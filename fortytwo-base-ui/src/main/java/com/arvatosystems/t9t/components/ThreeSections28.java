@@ -86,7 +86,7 @@ public class ThreeSections28 extends TwoSections28 {
     public void setVflex3(String vflex) {
         detailsGroup.setVflex(vflex);
     }
-    
+
     @Override
     public void setVlayoutVisible(boolean visible) {
         super.setVlayoutVisible(visible);

@@ -191,7 +191,7 @@ public class Field28 extends Cell {
             field.setGroup(ref);
         }
     }
-    
+
     @Override
     public boolean setVisible(boolean visible) {
         if (idf != null && idf.getComponent() != null) {

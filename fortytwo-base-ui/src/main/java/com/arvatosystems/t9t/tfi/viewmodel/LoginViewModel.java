@@ -291,7 +291,7 @@ public class LoginViewModel {
     public final void setSelected(ComboBoxItem selected) {
         this.selected = selected;
     }
-    
+
     public String getUsername() {
         return ApplicationUtil.getCookie(USERNAME_COOKIE);
     }

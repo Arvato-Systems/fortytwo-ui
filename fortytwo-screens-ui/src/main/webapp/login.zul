@@ -29,14 +29,14 @@
                 </div>
                 <textbox id="userName" focus="@init(userName.value eq '')" name="user" maxlength="16" onOK="@command('login', username=userName.value, rememberMe=rememberMe.checked)" value="@init(vm.username)"></textbox>
             </div>
-            
+
             <div sclass="block-field">
                 <div>
                     <span sclass="h6">${l:translate('login', 'password')}</span>
                 </div>
                 <textbox id="passwordTxb" focus="@init(userName.value ne '')" type="password" name="pass" maxlength="64" onOK="@command('login', username=userName.value, rememberMe=rememberMe.checked)"></textbox>
             </div>
-            
+
             <div class="block-field">
                <div>
                     <span sclass="h6">Language</span>
@@ -63,23 +63,23 @@
             <div class="block-field" style="line-height: 40px;" >
                 <checkbox id="rememberMe" label="${l:translate('login','rememberMe')}" name="rememberMe" checked="@init(userName.value ne '')"/>
             </div>
-            
+
                 <button id="btnLogin" label="${l:translate('login','title')}" sclass="square-btn login-btn"
                            onClick="@command('login', username=userName.value, rememberMe=rememberMe.checked)"/>
                 <div sclass="login-error" visible="${not empty requestScope.loginFailure}"><label value="${l:translate('err','loginFailed')}" ></label></div>
-                
+
                  <a href="/screens/login/forgotPassword.zul" sclass="forget-password-link" label="${l:translate('forgotpw','title')}" />
-                
+
                 <div>
                         <div>
                             <span sclass="version h6">
                                 ${desktop.webApp.version} - build ${desktop.webApp.build}
                             </span>
-                            
+
                             <span sclass="h6">${l:translate('app','companyName')}</span>
                         </div>
                         </div>
-                    
+
         </vbox>
     </h:form>
 

@@ -272,7 +272,7 @@ public class LeanGridConfigResolver implements ILeanGridConfigResolver {
         boolean isNowDescending = BooleanUtil.isTrue(gridPrefs.getSortDescending());
         return isNowDescending != wasDescending || !Objects.equal(oldSortColumn, gridPrefs.getSortColumn());
     }
-    
+
     @Override
     public int getVariant() {
         return variant;

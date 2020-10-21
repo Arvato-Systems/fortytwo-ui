@@ -132,10 +132,10 @@
                                  </choose>
                                  <choose>
                                             <when test="@load(vm.naviGroupingViewModel.getChild(index, childIndex).menuItemVisible)">
-                                              <navitem label="${vm.naviGroupingViewModel.getChild(index, childIndex).name}"  
-                                                  image="${vm.naviGroupingViewModel.getChild(index, childIndex).img}"  
-                                                  onClick="@command('setNaviSelection',navi=vm.naviGroupingViewModel.getChild(index, childIndex))" 
-                                                  ca:onClick="collapseHeaderMenu();" 
+                                              <navitem label="${vm.naviGroupingViewModel.getChild(index, childIndex).name}"
+                                                  image="${vm.naviGroupingViewModel.getChild(index, childIndex).img}"
+                                                  onClick="@command('setNaviSelection',navi=vm.naviGroupingViewModel.getChild(index, childIndex))"
+                                                  ca:onClick="collapseHeaderMenu();"
                                                   ca:data-navi="${vm.naviGroupingViewModel.getChild(index, childIndex).naviId}"
                                                   selected="@load(vm.selected eq vm.naviGroupingViewModel.getChild(index, childIndex))"/>
                                           </when>

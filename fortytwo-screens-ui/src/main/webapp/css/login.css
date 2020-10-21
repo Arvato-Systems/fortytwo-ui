@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 /* Neutralize ZK generated default styles based on ZK 8.5 */
-@font-face { font-family: 'Helvetica Neue'; src: url('../fonts/HelveticaNeue-Regular.otf'); } 
+@font-face { font-family: 'Helvetica Neue'; src: url('../fonts/HelveticaNeue-Regular.otf'); }
 
 @font-face {
   font-family: 'Helvetica Neue';
@@ -102,7 +102,7 @@ body *:not([class*="z-icon-"]) {
 }
 
 .comboboxWithIcon > .z-combobox-readonly {
-    width: 202px; 
+    width: 202px;
 }
 
 .textbox-with-icon > input {
@@ -120,7 +120,7 @@ body *:not([class*="z-icon-"]) {
 
 .comboboxWithIcon > .z-combobox {
     line-height: 30px;
-}    
+}
 
 .square-btn {
     height: 38px !important;
@@ -171,7 +171,7 @@ body *:not([class*="z-icon-"]) {
 }
 
 .logo img {
-	padding-bottom: 25px;
+    padding-bottom: 25px;
 }
 
 .logo-label > span {
@@ -201,7 +201,7 @@ body *:not([class*="z-icon-"]) {
 
 .block-field > .z-combobox > .z-combobox-input {
     width: 100% !important;
-}    
+}
 
 .z-textbox {
     min-height: 30px;

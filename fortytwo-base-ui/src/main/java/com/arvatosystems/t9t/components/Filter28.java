@@ -214,11 +214,11 @@ public class Filter28 extends Grid implements IGridIdOwner {
         } else {
             toggleButton = null;
         }
-        
+
         Div div = new Div();
         div.setStyle("height:20px;display:block;");
         firstCell.appendChild(div);
-        
+
         rows.appendChild(eachRow);
 
         super.appendChild(rows);
@@ -257,4 +257,3 @@ public class Filter28 extends Grid implements IGridIdOwner {
         return session;
     }
 }
-

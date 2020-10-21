@@ -147,7 +147,7 @@ public class ApplicationViewModel {
                 Double doublePwdExpires = Math.ceil(new Double(pwdExpiresInDays) / (1000 * 60 * 60 * 24));
                 pwdExpiresInDays = doublePwdExpires.longValue();
             }
-            
+
             pwdExpiresInDays = 1l;
 
             LOGGER.info("New ApplicationViewModel created for user {}, now reading menu...", userId);
@@ -159,7 +159,7 @@ public class ApplicationViewModel {
             CTRL_KEYS = ZulUtils.i18nLabel("keys.ctrlKeys.ctrlKeys");
         }
     }
-    
+
     @Command
     public void changeTenant() {
         List allowedTenants= as.getAllowedTenants();
@@ -184,6 +184,17 @@ public class ApplicationViewModel {
         mainHome.setSclass(isDefaultOrder ? "": "reverse");
         reverse.setSrc(!isDefaultOrder ? "/css/reverse.css" : "");
         initHeaderMenu();
+
+        // redirect screen
+        String link = Executions.getCurrent().getParameter("link");
+        if (link != null) {
+            Navi navi = ApplicationUtil.getNavigationByLink(link);
+            if (navi == null)  {
+                Messagebox.show(ZulUtils.translate("redirect", "pageNotFound"), ZulUtils.translate("err", "title"), Messagebox.OK, Messagebox.ERROR);
+            } else {
+                setSelectedFromJump(navi, null);
+            }
+        }
     }
 
     private void initHeaderMenu() {
@@ -202,7 +213,7 @@ public class ApplicationViewModel {
         //Register events for the menupopup/context menu
         for (Component comp : navbar.getChildren()) {
             if (comp instanceof Nav) {
-                Nav nav = (Nav) comp; 
+                Nav nav = (Nav) comp;
                 nav.addEventListener(Events.ON_OPEN, ev -> {
                     for (Component comp2 : ev.getTarget().getChildren()) {
                         if (comp2 instanceof Navitem) {
@@ -212,7 +223,7 @@ public class ApplicationViewModel {
                 });
             }
         }
-        
+
         contextMenu.addEventListener(Events.ON_OPEN, ev -> {
             Component comp = ((OpenEvent)ev).getReference();
             if (comp instanceof Navitem) {
@@ -360,7 +371,7 @@ public class ApplicationViewModel {
     }
 
     public final String getSubMenuClass(int childCount) {
-        
+
         if (childCount > MAX_NUMBER_SUBMENU_ITEMS_PER_COLUMN) {
             int i = childCount / MAX_NUMBER_SUBMENU_ITEMS_PER_COLUMN;
             if (i > 1)
@@ -400,7 +411,7 @@ public class ApplicationViewModel {
             previouslyCachingTypeWasCreateWithoutCaching=false;
         }
 
-        if (!naviContentMap.containsKey(key) ||	
+        if (!naviContentMap.containsKey(key) ||
                 (cachingType==Constants.Application.CachingType.CREATE_AND_CACH) ||
                 (cachingType==Constants.Application.CachingType.CREATE_WITHOUT_CACHING)) {
 
@@ -568,7 +579,7 @@ public class ApplicationViewModel {
         navi.setLink("screens/session/change_pwd.zul");
         navi.setHierarchy(0);
         navi.setPermission("changePasswordScreen");
-        
+
         setNaviSelection(navi);
     }
 
@@ -636,7 +647,7 @@ public class ApplicationViewModel {
     /**
      * To check if subtitle should be display based on the menus iteration
      * if there is a new subtitle compared to the previous one, return true
-     * 
+     *
      * @param index
      * @param childIndex
      * @return
@@ -644,8 +655,8 @@ public class ApplicationViewModel {
     public boolean subtitleShouldDisplay(int index, int childIndex) {
 
         if (childIndex != 0) {
-            if (naviGroupingViewModel.getChild(index, childIndex).getSubcategory() != null && 
-                    naviGroupingViewModel.getChild(index, childIndex).getSubcategory() != 
+            if (naviGroupingViewModel.getChild(index, childIndex).getSubcategory() != null &&
+                    naviGroupingViewModel.getChild(index, childIndex).getSubcategory() !=
                     naviGroupingViewModel.getChild(index, childIndex - 1).getSubcategory()) {
                 return true;
             } else {
@@ -684,5 +695,3 @@ public class ApplicationViewModel {
         Executions.sendRedirect(Constants.ZulFiles.LOGOUT);
     }
 }
-
-

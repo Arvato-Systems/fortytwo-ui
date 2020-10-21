@@ -20,13 +20,13 @@
  *          *                                                             *
  *          ***************************************************************
  */
-@font-face { font-family: 'Helvetica Neue'; src: url('../fonts/HelveticaNeue-Regular.otf'); } 
+@font-face { font-family: 'Helvetica Neue'; src: url('../fonts/HelveticaNeue-Regular.otf'); }
 
 @font-face {
   font-family: 'Helvetica Neue';
-  src: url(../fonts/HelveticaNeue-Regular.otf); 
+  src: url(../fonts/HelveticaNeue-Regular.otf);
   font-weight: normal;
-  src: url(../fonts/HelveticaNeue-Bold.otf); 
+  src: url(../fonts/HelveticaNeue-Bold.otf);
   font-weight: bold;
 }
 
@@ -489,7 +489,7 @@ body {
 }
 
 .z-window-content {
-    padding: 0;    
+    padding: 0;
 }
 
 .header-background {
@@ -525,7 +525,7 @@ body {
 
 .header-title span {
     font-size: 18px;
-    font-weight: bold;	
+    font-weight: bold;
 }
 
 .header-left-item {
@@ -613,7 +613,7 @@ body {
 
 .header-nav>div>div>a>span>span {
     text-decoration: none;
-    
+
 }
 
 .header-nav>div>div>a:hover {
@@ -626,18 +626,18 @@ body {
     min-width: 0 !important;
     width: auto;
     border: 0;
-    
+
 }
 
 .header-nav-submenu > a {
     background: none!important;
     color: #fff;
     border: 0;
-}    
+}
 
 .header-nav-submenu > a > span {
     margin-top: 5px;
-} 
+}
 
 .header-nav-submenu > ul {
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px
@@ -835,7 +835,7 @@ body {
 
 .toggleButton {
     padding-left: 10px;
-    text-align: left; 
+    text-align: left;
     display: block;
     color: #368AC0;
 }
@@ -843,14 +843,14 @@ body {
 .filterCell {
     background: #d8d8d8 !important;
 }
- 
+
 .filterCell *{
     background: transparent;
 }
 
 .z-listheader, .z-listbox-header {
     background: #d8d8d8 !important;
-    border-right: 0;    
+    border-right: 0;
 }
 
 .z-listheader-content {
@@ -888,12 +888,12 @@ body {
 }
 
 .z-groupbox {
-	padding-top: 10px;
+    padding-top: 10px;
     background: #fafafa;
 }
 
 .z-groupbox-title-content {
-    padding-top: 16px !important; 
+    padding-top: 16px !important;
     font-size: 14px !important;
     font-weight: bold !important;
 }
@@ -903,7 +903,7 @@ body {
 }
 
 .z-menupopup {
-    background: #fff;    
+    background: #fff;
 }
 .z-menupopup-shadow {
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px
@@ -937,7 +937,7 @@ body {
      -moz-border-radius: 0;
      -o-border-radius: 0;
      -ms-border-radius: 0;
-     border-radius: 0; 
+     border-radius: 0;
      padding-right: 30px;
 }
 
@@ -977,7 +977,7 @@ body {
     background: #FAFAFA;
     border:none;
     border-radius:0;
-    margin-right:8px; 
+    margin-right:8px;
     box-shadow: none !important;
 }
 
@@ -1007,7 +1007,7 @@ body {
 .header-nav * {
     -webkit-user-select: none;
     -moz-user-select: none;
-    -ms-user-select: none; 
+    -ms-user-select: none;
     -o-user-select: none;
     user-select: none;
 }
@@ -1191,7 +1191,7 @@ body {
 }
 
 .button28 {
-    height: 22px; 
+    height: 22px;
     min-width: 110px;
 }
 
@@ -1200,5 +1200,5 @@ body {
 }
 
 .modal-buttons-container {
-	margin: 10px 15px 10px;
+    margin: 10px 15px 10px;
 }

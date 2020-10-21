@@ -716,7 +716,7 @@ public final class ApplicationSession {
 
         return resource;
     }
-    
+
 
     /**
      * Logout the current (shiro) authenticated user
